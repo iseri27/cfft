@@ -5,21 +5,21 @@
 #include "cf.h" 
 
 /**
- * 判断是否以某字符开头
+ * Check a string whether starts with a certain character.
  */
 CF_Bool start_with_char(char* str, char cha) {
     return str[0] == cha ? True : False;
 }
 
 /**
- * 判断是否是隐藏文件
+ * Check whether is a hidden file
  */
 CF_Bool is_hidden(char* basename) {
     return start_with_char(basename, '.');
 }
 
 /**
- * 检查文件是否存在
+ * Check file whether exists
  */
 CF_Bool file_exists(char* path) {
     FILE* fp = fopen(path, "rb");
@@ -32,7 +32,7 @@ CF_Bool file_exists(char* path) {
 }
 
 /**
- * 列出给定文件夹下的所有文件
+ * List all files in certain directory
  */
 CF_Bool list_directory(char* path, CF_Bool show_hidden, CF_Integer* cnt, char** list) {
     DIR *directory;
@@ -45,7 +45,7 @@ CF_Bool list_directory(char* path, CF_Bool show_hidden, CF_Integer* cnt, char** 
             if (show_hidden == False && is_hidden(dir->d_name) == True) {
                 continue;
             }
-            // 存储字符串
+
             length = strlen(dir->d_name);
             list[n] = (char*) malloc(length * sizeof(char));
             sprintf(list[n], "%s", dir->d_name);
@@ -61,13 +61,13 @@ CF_Bool list_directory(char* path, CF_Bool show_hidden, CF_Integer* cnt, char** 
 }
 
 /**
- * 复制文件
+ * Copy a file
  */
 CF_Bool copy_file(char* src, char* dest, CF_Bool force_copy) {
     FILE* fin;
     FILE* fout;
     
-    // 检查目标文件是否已经存在
+    // Check if file already exists.
     if (force_copy == False && file_exists(dest) == True) {
         return False;
     }
