@@ -24,11 +24,22 @@ CF_Bool is_hidden(char* basename) {
 CF_Bool file_exists(char* path) {
     FILE* fp = fopen(path, "rb");
     if (fp == NULL) {
-        fclose(fp);
         return False;
     }
     fclose(fp);
     return True;
+}
+
+/**
+ * strcat
+ */
+int strjoin(char* str1, char* str2, char* dest) {
+    int len1 = strlen(str1);
+    int len2 = strlen(str2);
+
+    strcpy(dest, str1);
+    strcpy(dest+len1, str2);
+    return len1 + len2;
 }
 
 /**
@@ -75,7 +86,7 @@ CF_Bool copy_file(char* src, char* dest, CF_Bool force_copy) {
     fin = fopen(src, "rb");
     fout = fopen(dest, "wb");
 
-    char buf[256];
+    char buf[BUFFER_SIZE];
     int len = 0;
     while ((len = fread(buf, 1, sizeof(buf), fin)) > 0) {
         fwrite(buf, 1, len, fout);

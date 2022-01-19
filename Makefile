@@ -1,7 +1,7 @@
 SOURCES := $(wildcard ./*.c)
 OBJECTS := $(patsubst ./%.c, %.o, $(SOURCES))
 CC = gcc
-CFLAGS += -std=c11
+CFLAGS += -std=c11 -g -DDEBUG
 TARGET = cfft
 
 $(TARGET): $(OBJECTS)

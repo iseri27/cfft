@@ -1,6 +1,8 @@
 #ifndef CFFT_H
 #define CFFT_H
 
+#define BUFFER_SIZE 31
+
 typedef int CF_Size;
 typedef int CF_Bool;
 typedef int CF_Integer;
@@ -16,8 +18,8 @@ typedef struct CF_file {
 } CF_file;
 
 /**********************
-*      SOME UTILS     *
-**********************/
+ *     SOME UTILS     *
+ **********************/
 
 /**
  * Check a string whether starts with a certain character.
@@ -33,6 +35,14 @@ CF_Bool is_hidden(char* basename);
  * Check file whether exists
  */
 CF_Bool file_exists(char* path);
+
+/**
+ * strcat
+ */
+int strjoin(char* str1, char* str2, char* dest);
+/**********************
+ *   FILE OPERATION   *
+ **********************/
 
 /**
  * List all files in certain directory
