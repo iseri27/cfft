@@ -11,8 +11,10 @@ $(TARGET): $(OBJECTS)
 	$(CC) -c $^ $(CFLAGS) -o $@
 
 install: $(TARGET)
+	cp -f cfft /usr/local/bin/cfft
 
 clean:
 	$(RM) *.o *.exe $(TARGET)
 
 uninstall: clean
+	$(RM) /usr/local/bin/cfft

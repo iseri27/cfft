@@ -4,6 +4,17 @@
 #include <stdlib.h>
 #include "cf.h" 
 
+/**********************
+*      SOME UTILS     *
+**********************/
+
+/**
+ * Just wait an input, do nothing
+ */
+void wait_a_char() {
+    char ch = getchar();
+}
+
 /**
  * Check a string whether starts with a certain character.
  */
@@ -33,7 +44,7 @@ CF_Bool file_exists(char* path) {
 /**
  * strcat
  */
-int strjoin(char* str1, char* str2, char* dest) {
+int strjoin(const char* str1, const char* str2, char* dest) {
     int len1 = strlen(str1);
     int len2 = strlen(str2);
 
@@ -43,9 +54,19 @@ int strjoin(char* str1, char* str2, char* dest) {
 }
 
 /**
+ * Sort strings
+ */
+void sort(char** strs, int n) {
+    // Just do nothing now.
+}
+
+/**********************
+*   FILE OPERATIONS   *
+**********************/
+/**
  * List all files in certain directory
  */
-CF_Bool list_directory(char* path, CF_Bool show_hidden, CF_Integer* cnt, char** list) {
+CF_Bool list_directory(const char* path, CF_Bool show_hidden, CF_Integer* cnt, char** list) {
     DIR *directory;
     struct dirent *dir;
     int n = 0, length = 0;
