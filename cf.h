@@ -1,9 +1,10 @@
 #ifndef CFFT_H
 #define CFFT_H
 
+#include <strings.h>
 #define BUFFER_SIZE 31
 
-typedef int CF_Size;
+typedef unsigned int CF_Size;
 typedef int CF_Bool;
 typedef int CF_Integer;
 typedef int CF_Error;
@@ -14,56 +15,67 @@ static const CF_Bool False = 0;
 typedef struct CF_file {
     char* path;
     char* basename;
+    char* fullname;
     CF_Size size; // Bytes
     CF_Bool is_dir;
 } CF_file;
 
+typedef struct CF_array {
+    CF_file** lt;
+    CF_Size size;
+    CF_Size capacity;
+    CF_Integer (*compare)(CF_file*, CF_file*);
+} CF_array;
+
 /**********************
- *     SOME UTILS     *
+ *  ARRAY OPERATION   *
  **********************/
+/**
+ * Create a CF_file object
+ */
+CF_file* CF_new_file();
 
 /**
- * Just wait an input, do nothing
+ * Add a CF_file object to array
  */
-void wait_a_char();
+CF_Bool CF_add(CF_array* arr, CF_file* cff);
 
 /**
- * Check a string whether starts with a certain character.
+ * Delete an element
  */
-CF_Bool start_with_char(char* str, char cha);
+CF_Bool CF_del(CF_array* arr, CF_Integer index);
 
 /**
- * Check whether is a hidden file
+ * Get an element from array
  */
-CF_Bool is_hidden(char* basename);
+CF_file* CF_get(CF_array* arr, CF_Integer index);
 
 /**
- * Check file whether exists
+ * Clear the array
  */
-CF_Bool file_exists(char* path);
-
-/**
- * strcat
- */
-int strjoin(const char* str1, const char* str2, char* dest);
-
-/**
- * Sort strings
- */
-void sort(char** strs, int n);
+void CF_clear(CF_array* arr);
 
 /**********************
  *   FILE OPERATION   *
  **********************/
 /**
+ * Release a CF_file pointer
+ */
+void CF_free(CF_file* cff);
+
+/**
+ * Get file's detailed information by its path and basename.
+ */
+CF_Bool get_file_info(const char* path, const char* basename, CF_file* file);
+
+/**
  * List all files in certain directory
- * @param path: directory to be listed
+ * @param cffp: directory to be listed
  * @param show_hidden: True for showing hidden files; False for else
- * @param cnt: file number that exists in target directory
- * @param list: used to store file names
+ * @param arr: used to store file names
  * @return True for Success; False for failed.
  */
-CF_Bool list_directory(const char* path, CF_Bool show_hidden, CF_Integer* cnt, char** list);
+CF_Bool list_directory(CF_file* cffp, CF_Bool show_hidden, CF_array* arr);
 
 /**
  * Copy a file

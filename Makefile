@@ -1,10 +1,14 @@
 SOURCES := $(wildcard ./*.c)
+HEADERS := $(wildcard ./*.h)
 OBJECTS := $(patsubst ./%.c, %.o, $(SOURCES))
 CC = gcc
 CFLAGS += -std=c11 -g -DDEBUG
 TARGET = cfft
 
-$(TARGET): $(OBJECTS)
+$(TARGET): $(OBJECTS) $(HEADERS)
+	$(CC) $(OBJECTS) $(CFLAGS) -o $@
+
+test: utils.o test.o
 	$(CC) $^ $(CFLAGS) -o $@
 
 %.o: %.c
@@ -14,7 +18,7 @@ install: $(TARGET)
 	cp -f cfft /usr/local/bin/cfft
 
 clean:
-	$(RM) *.o *.exe $(TARGET)
+	$(RM) *.o *.exe $(TARGET) cfft test
 
 uninstall: clean
 	$(RM) /usr/local/bin/cfft

@@ -3,74 +3,146 @@
 #include <string.h>
 #include <stdlib.h>
 #include "cf.h" 
+#include "utils.h"
 
 /**********************
-*      SOME UTILS     *
-**********************/
-
+ *  ARRAY OPERATION   *
+ **********************/
 /**
- * Just wait an input, do nothing
+ * Create a CF_file object
  */
-void wait_a_char() {
-    char ch = getchar();
+CF_file* CF_new_file() {
+    CF_file* cffp = (CF_file*) calloc(1, sizeof(CF_file));
+    return cffp;
 }
 
 /**
- * Check a string whether starts with a certain character.
+ * Add a CF_file object to array
  */
-CF_Bool start_with_char(char* str, char cha) {
-    return str[0] == cha ? True : False;
-}
+CF_Bool CF_add(CF_array* arr, CF_file* cff) {
+    if (arr->size == arr->capacity) {
+        const int newlen = (int)(1.5 * arr->capacity);
+        CF_file** lt = realloc(arr->lt, newlen);
+        if (lt == NULL) {
+            return False;
+        } else {
+            arr->capacity = newlen;
+        }
 
-/**
- * Check whether is a hidden file
- */
-CF_Bool is_hidden(char* basename) {
-    return start_with_char(basename, '.');
-}
-
-/**
- * Check file whether exists
- */
-CF_Bool file_exists(char* path) {
-    FILE* fp = fopen(path, "rb");
-    if (fp == NULL) {
-        return False;
     }
-    fclose(fp);
+
+    arr->lt[arr->size++] = cff;
     return True;
 }
 
 /**
- * strcat
+ * Delete an element
  */
-int strjoin(const char* str1, const char* str2, char* dest) {
-    int len1 = strlen(str1);
-    int len2 = strlen(str2);
+CF_Bool CF_del(CF_array* arr, CF_Integer index) {
+    if (index < 0 || index >= arr->size) {
+        return False;
+    }
 
-    strcpy(dest, str1);
-    strcpy(dest+len1, str2);
-    return len1 + len2;
+    for (int i = index; i < arr->size - 1; i++) {
+        arr->lt[i] = arr->lt[i + 1];
+    }
+
+    return True;
 }
 
 /**
- * Sort strings
+ * Get an element from array
  */
-void sort(char** strs, int n) {
-    // Just do nothing now.
+CF_file* CF_get(CF_array* arr, CF_Integer index) {
+    if (index < 0 || arr->size <= 0 || index >= arr->size) {
+        return NULL; 
+    }
+
+    return arr->lt[index];
 }
+
+void CF_sort(CF_array* arr) {
+    int (*compare)(CF_file*, CF_file*);
+    compare = arr->compare;
+
+    for (int i = 0; i < arr->size; i++) {
+        for (int j = 0; j < arr->size; j++) {
+            if (compare(arr->lt[i], arr->lt[j]) > 0) {
+                CF_file* tmp = arr->lt[i];
+                arr->lt[i] = arr->lt[j];
+                arr->lt[j] = tmp;
+            }
+        }
+    }
+}
+
+/**
+ * Clear the array
+ */
+void CF_clear(CF_array* arr);
 
 /**********************
-*   FILE OPERATIONS   *
-**********************/
+ *   FILE OPERATION   *
+ **********************/
+/**
+ * Release a string pointer
+ * **NOT DEFIINED IN cf.h**
+ */
+void free_a_strp(char* str) {
+    if (str != NULL) {
+        free(str);
+    }
+}
+
+/**
+ * Release string pointers of a CF_file pointer
+ * **NOT DEFIINED IN cf.h**
+ */
+void CF_free_strings(CF_file* cff) {
+    free_a_strp(cff->path);
+    free_a_strp(cff->basename);
+    free_a_strp(cff->fullname);
+}
+
+/**
+ * Release a CF_file pointer
+ */
+void CF_free(CF_file* cff) {
+    // Release strings
+    CF_free_strings(cff);
+    free(cff);
+}
+
+/**
+ * Get file's detailed information by its path and basename
+ */
+CF_Bool get_file_info(const char* path, const char* basename, CF_file* cff) {
+    CF_free_strings(cff);
+    const int len1 = strlen(path);
+    const int len2 = strlen(basename);
+    cff->path = (char*) malloc(sizeof(char) * (len1 + 1));
+    cff->basename = (char *) malloc(sizeof(char) * (len2 + 1));
+    cff->fullname = (char *) malloc((sizeof(char) * (len1 + len2 + 1)));
+
+    strcpy(cff->path, path);
+    strcpy(cff->basename, basename);
+    path_join(path, basename, cff->fullname);
+    
+    return True;
+}
+
 /**
  * List all files in certain directory
+ * @param cffp: directory to be listed
+ * @param show_hidden: True for showing hidden files; False for else
+ * @param arr: used to store file names
+ * @return True for Success; False for failed.
  */
-CF_Bool list_directory(const char* path, CF_Bool show_hidden, CF_Integer* cnt, char** list) {
+CF_Bool list_directory(CF_file* cffp, CF_Bool show_hidden, CF_array* arr) {
     DIR *directory;
     struct dirent *dir;
     int n = 0, length = 0;
-    directory = opendir(path);
+    directory = opendir(cffp->fullname);
 
     if (directory) {
         while ((dir = readdir(directory)) != NULL) {
