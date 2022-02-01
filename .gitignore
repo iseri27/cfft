@@ -2,5 +2,8 @@
 *.exe
 *.out
 *.txt
+test.*
 cfft
 cf
+test
+
