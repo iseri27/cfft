@@ -11,15 +11,49 @@
 /**
  * Create a CF_file object
  */
-CF_file* CF_new_file() {
+CF_file* CF_FILE_new_empty() {
     CF_file* cffp = (CF_file*) calloc(1, sizeof(CF_file));
     return cffp;
 }
 
 /**
+ * Create a CF_file object
+ */
+CF_file* CF_FILE_new(const char* path, const char* basename) {
+    CF_file* cffp = (CF_file*) calloc(1, sizeof(CF_file));
+    const int len1 = strlen(path);
+    const int len2 = strlen(basename);
+    cffp->path = (char*) malloc((len1 + 1) * sizeof(char));
+    cffp->basename = (char*) malloc((len2 + 1) * sizeof(char));
+    cffp->fullpath = (char*) malloc((len1 + len2 + 2) * sizeof(char));
+
+    memcpy(cffp->path, path, len1+1);
+    memcpy(cffp->basename, basename, len2+1);
+    path_join(path, basename, cffp->fullpath);
+
+    return cffp;
+}
+
+/**
+ * Create an array object
+ */
+CF_array* CF_ARRAY_new(CF_Size size) {
+    if (size < DEFAULT_ARRAY_LENGTH) {
+        size = DEFAULT_ARRAY_LENGTH;
+    }
+
+    CF_array* array = (CF_array*) calloc(1, sizeof(CF_array));
+    array->capacity = size;
+    array->size = 0;
+    array->lt = (CF_file**) calloc(array->capacity, sizeof(CF_file*));
+
+    return array;
+}
+
+/**
  * Add a CF_file object to array
  */
-CF_Bool CF_add(CF_array* arr, CF_file* cff) {
+CF_Bool CF_ARRAY_add(CF_array* arr, CF_file* cff) {
     if (arr->size == arr->capacity) {
         const int newlen = (int)(1.5 * arr->capacity);
         CF_file** lt = realloc(arr->lt, newlen);
@@ -38,7 +72,7 @@ CF_Bool CF_add(CF_array* arr, CF_file* cff) {
 /**
  * Delete an element
  */
-CF_Bool CF_del(CF_array* arr, CF_Integer index) {
+CF_Bool CF_ARRAY_del(CF_array* arr, CF_Integer index) {
     if (index < 0 || index >= arr->size) {
         return False;
     }
@@ -47,13 +81,15 @@ CF_Bool CF_del(CF_array* arr, CF_Integer index) {
         arr->lt[i] = arr->lt[i + 1];
     }
 
+    arr->size--;
+
     return True;
 }
 
 /**
  * Get an element from array
  */
-CF_file* CF_get(CF_array* arr, CF_Integer index) {
+CF_file* CF_ARRAY_get(CF_array* arr, CF_Integer index) {
     if (index < 0 || arr->size <= 0 || index >= arr->size) {
         return NULL; 
     }
@@ -61,7 +97,7 @@ CF_file* CF_get(CF_array* arr, CF_Integer index) {
     return arr->lt[index];
 }
 
-void CF_sort(CF_array* arr) {
+void CF_ARRAY_sort(CF_array* arr) {
     int (*compare)(CF_file*, CF_file*);
     compare = arr->compare;
 
@@ -79,7 +115,9 @@ void CF_sort(CF_array* arr) {
 /**
  * Clear the array
  */
-void CF_clear(CF_array* arr);
+void CF_ARRAY_clear(CF_array* arr) {
+
+}
 
 /**********************
  *   FILE OPERATION   *
@@ -98,35 +136,35 @@ void free_a_strp(char* str) {
  * Release string pointers of a CF_file pointer
  * **NOT DEFIINED IN cf.h**
  */
-void CF_free_strings(CF_file* cff) {
+void free_strings(CF_file* cff) {
     free_a_strp(cff->path);
     free_a_strp(cff->basename);
-    free_a_strp(cff->fullname);
+    free_a_strp(cff->fullpath);
 }
 
 /**
  * Release a CF_file pointer
  */
-void CF_free(CF_file* cff) {
+void CF_FILE_free(CF_file* cff) {
     // Release strings
-    CF_free_strings(cff);
+    free_strings(cff);
     free(cff);
 }
 
 /**
  * Get file's detailed information by its path and basename
  */
-CF_Bool get_file_info(const char* path, const char* basename, CF_file* cff) {
-    CF_free_strings(cff);
+CF_Bool CF_FILE_get_info(const char* path, const char* basename, CF_file* cff) {
+    free_strings(cff);
     const int len1 = strlen(path);
     const int len2 = strlen(basename);
     cff->path = (char*) malloc(sizeof(char) * (len1 + 1));
     cff->basename = (char *) malloc(sizeof(char) * (len2 + 1));
-    cff->fullname = (char *) malloc((sizeof(char) * (len1 + len2 + 1)));
+    cff->fullpath = (char *) malloc((sizeof(char) * (len1 + len2 + 1)));
 
     strcpy(cff->path, path);
     strcpy(cff->basename, basename);
-    path_join(path, basename, cff->fullname);
+    path_join(path, basename, cff->fullpath);
     
     return True;
 }
@@ -138,45 +176,42 @@ CF_Bool get_file_info(const char* path, const char* basename, CF_file* cff) {
  * @param arr: used to store file names
  * @return True for Success; False for failed.
  */
-CF_Bool list_directory(CF_file* cffp, CF_Bool show_hidden, CF_array* arr) {
+CF_Bool CF_FILE_list_directory(CF_file* cffp, CF_Bool show_hidden, CF_array* arr) {
     DIR *directory;
     struct dirent *dir;
-    int n = 0, length = 0;
-    directory = opendir(cffp->fullname);
+    directory = opendir(cffp->fullpath);
 
     if (directory) {
         while ((dir = readdir(directory)) != NULL) {
-            if (show_hidden == False && is_hidden(dir->d_name) == True) {
+            if (show_hidden == False && dir->d_name[0] == '.') {
                 continue;
             }
 
-            length = strlen(dir->d_name);
-            list[n] = (char*) malloc(length * sizeof(char));
-            sprintf(list[n], "%s", dir->d_name);
-            n++;
+            CF_file *fp = CF_FILE_new(cffp->fullpath, dir->d_name);
+            CF_ARRAY_add(arr, fp);
+
         }
         closedir(directory);
     } else {
         return False;
     }
 
-    *cnt = n;
     return True;
 }
 
 /**
  * Copy a file
  */
-CF_Bool copy_file(char* src, char* dest, CF_Bool force_copy) {
+CF_Bool CF_FILE_copy(CF_file* src, char* dest, CF_Bool force_copy) {
     FILE* fin;
     FILE* fout;
     
     // Check if file already exists.
-    if (force_copy == False && file_exists(dest) == True) {
+    if (force_copy == False && is_exist(dest) == True) {
         return False;
     }
 
-    fin = fopen(src, "rb");
+    fin = fopen(src->fullpath, "rb");
     fout = fopen(dest, "wb");
 
     char buf[BUFFER_SIZE];

@@ -59,6 +59,8 @@ int strjoin(const char* str1, const char* str2, char* dest) {
 void path_join(const char* path1, const char* path2, char* resultbuf) {
     int len1 = strlen(path1);
     int len2 = strlen(path2);
+    int len3 = 0;
+    int k = 0;
 
     CF_Bool end_with = False;
     CF_Bool start_with = False;
@@ -72,15 +74,27 @@ void path_join(const char* path1, const char* path2, char* resultbuf) {
     }
 
     memcpy(resultbuf, path1, sizeof(char) * len1);
+    len3 = len1;
 
     if (start_with == True && end_with == True) {
-        memcpy(&resultbuf[len1], path2+1, sizeof(char) * (len2 - 1));
+        // k = 1;
+        memcpy(&resultbuf[len1], path2+1, sizeof(char) * len2);
+        len3 = len1 + len2 - 1;
     } else if (start_with == False && end_with == True) {
-        memcpy(&resultbuf[len1], path2, sizeof(char) * len2);
+        memcpy(&resultbuf[len1], path2, sizeof(char) * (len2 + 1));
+        len3 = len1 + len2;
     } else if (start_with == True && end_with == False) {
-        memcpy(&resultbuf[len1], path2, sizeof(char) * len2);
+        memcpy(&resultbuf[len1], path2, sizeof(char) * (len2 + 1));
+        len3 = len1 + len2;
     } else {
-        resultbuf[len1] = SEP;
-        memcpy(&resultbuf[len1+1], path2, sizeof(char) * len2);
+        resultbuf[len3++] = SEP;
+        memcpy(&resultbuf[len1+1], path2, sizeof(char) * (len2 + 1));
+        len3 = len1 + len2 + 1;
     }
+
+    // for (; k < len2;) {
+    //     resultbuf[len3++] = path2[k++];
+    // }
+
+    resultbuf[len3] = '\0';
 }

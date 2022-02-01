@@ -8,7 +8,7 @@ TARGET = cfft
 $(TARGET): $(OBJECTS) $(HEADERS)
 	$(CC) $(OBJECTS) $(CFLAGS) -o $@
 
-test: utils.o test.o
+test: utils.o test.o cf.o
 	$(CC) $^ $(CFLAGS) -o $@
 
 %.o: %.c
