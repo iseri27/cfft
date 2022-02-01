@@ -11,19 +11,13 @@ void display_files(CF_array*);
 int compare(CF_file*, CF_file*);
 
 int main(int argc, char *argv[]) {
-    // 1. 列出所有的模板
-    // 2. 选择一个模板
-    // 3. 指定文件名
-    // 4. 将模板拷贝到当前目录
 
-    // char **list;
     CF_array* array = CF_ARRAY_new(DEFAULT_ARRAY_LENGTH);
     CF_file* template_dir = CF_FILE_new(HOME_DIR, TEMPLATES_DIR);
 
     CF_Bool rc;
 
     rc = CF_FILE_list_directory(template_dir, False, array);
-    // rc = list_directory(TEMPLATES_DIR, False, &cnt, list);
 
     if (rc == False) {
         fprintf(stderr, "Faliled to get file list in %s.", template_dir->fullpath);
@@ -51,8 +45,6 @@ int main(int argc, char *argv[]) {
     CF_FILE_copy(CF_ARRAY_get(array, chosen), 
             CF_ARRAY_get(array, chosen)->basename, True);
 
-    wait_a_char();
-
     return 0;
 }
 
@@ -66,7 +58,6 @@ void display_files(CF_array* array) {
         }
     }
 }
-
 
 int compare(CF_file* cff1, CF_file* cff2) {
     return strcmp(cff1->basename, cff2->basename);
