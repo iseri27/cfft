@@ -1,6 +1,10 @@
-/* Template file directory */
 #include "cf.h"
-static const char* TEMPLATES_DIR = "/home/corona/Templates/";
+
+/**
+ * Template file directory
+ */
+static const char* HOME_DIR = "/home/corona";
+static const char* TEMPLATES_DIR = "Templates";
 
 /**
  * Error Codes
