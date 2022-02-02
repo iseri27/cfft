@@ -7,13 +7,16 @@
 
 char buf1[255], buf2[255];
 
-void display_files(CF_array*);
-int compare(CF_file*, CF_file*);
+void display_files(CF_Array*);
+int compare(CF_File*, CF_File*);
 
 int main(int argc, char *argv[]) {
 
-    CF_array* array = CF_ARRAY_new(DEFAULT_ARRAY_LENGTH);
-    CF_file* template_dir = CF_FILE_new(HOME_DIR, TEMPLATES_DIR);
+    CF_Array* array = NULL;
+    CF_File* template_dir = NULL;
+
+    array = CF_ARRAY_new(DEFAULT_ARRAY_LENGTH);
+    template_dir = CF_FILE_new(HOME_DIR, TEMPLATES_DIR);
 
     CF_Bool rc;
 
@@ -44,11 +47,14 @@ int main(int argc, char *argv[]) {
 
     CF_FILE_copy(CF_ARRAY_get(array, chosen), 
             CF_ARRAY_get(array, chosen)->basename, True);
+    
+    CF_FILE_free(template_dir);
+    CF_ARRAY_free(array);
 
     return 0;
 }
 
-void display_files(CF_array* array) {
+void display_files(CF_Array* array) {
 
     for (int i = 0; i < array->size; i++) {
         if (array->size < 10) {
@@ -59,6 +65,6 @@ void display_files(CF_array* array) {
     }
 }
 
-int compare(CF_file* cff1, CF_file* cff2) {
+int compare(CF_File* cff1, CF_File* cff2) {
     return strcmp(cff1->basename, cff2->basename);
 }
