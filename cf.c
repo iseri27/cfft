@@ -122,8 +122,23 @@ void CF_ARRAY_clear(CF_Array* arr) {
 /**
  * Delete an array and free its space
  */
-void CF_ARRAY_free(CF_array* arr) {
+void CF_ARRAY_free(CF_Array** arr) {
+    if ((*arr) == NULL) {
+        return;
+    }
 
+    if ((*arr)->lt != NULL) {
+        for (int i = 0; i < (*arr)->capacity; i++) {
+            if ((*arr)->lt[i] != NULL) {
+                CF_FILE_free(&((*arr)->lt[i]));
+            }
+        }
+
+        free((*arr)->lt);
+    }
+    
+    free(*arr);
+    *arr = NULL;
 }
 
 /**********************
@@ -147,15 +162,6 @@ void free_strings(CF_File* cff) {
     free_a_strp(cff->path);
     free_a_strp(cff->basename);
     free_a_strp(cff->fullpath);
-}
-
-/**
- * Release a CF_file pointer
- */
-void CF_FILE_free(CF_file* cff) {
-    // Release strings
-    free_strings(cff);
-    free(cff);
 }
 
 /**
@@ -231,4 +237,16 @@ CF_Bool CF_FILE_copy(CF_File* src, char* dest, CF_Bool force_copy) {
     fclose(fout);
 
     return True;
+}
+
+/**
+ * Release a CF_file pointer
+ */
+void CF_FILE_free(CF_File** cff) {
+    if ((*cff) != NULL) {
+        // Release strings
+        free_strings(*cff);
+        free(*cff);
+        *cff = NULL;
+    }
 }

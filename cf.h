@@ -1,7 +1,8 @@
+#include <strings.h>
+
 #ifndef CFFT_H
 #define CFFT_H
 
-#include <strings.h>
 #define BUFFER_SIZE 31
 #define DEFAULT_ARRAY_LENGTH 10
 
@@ -61,11 +62,12 @@ void CF_ARRAY_sort(CF_Array* arr);
  */
 void CF_ARRAY_clear(CF_Array* arr);
 
-// static void free_array(CF_Array* arr) {
-    // if (condition) {
-    // statements
-    // }
-// }
+/**
+ * Release an CF_Array pointer
+ * and free its spaces
+ */
+void CF_ARRAY_free(CF_Array** arr);
+
 /**********************
  *   FILE OPERATION   *
  **********************/
@@ -97,4 +99,10 @@ CF_Bool CF_FILE_list_directory(CF_File* cff, CF_Bool show_hidden, CF_Array* arr)
  * Copy a file
  */
 CF_Bool CF_FILE_copy(CF_File* cff, char* dest, CF_Bool force_copy);
+
+/**
+ * Release a CF_File pointer
+ * and free its spaces
+ */
+void CF_FILE_free(CF_File** cff);
 #endif

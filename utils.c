@@ -24,7 +24,7 @@ CF_Bool start_with_char(char* str, char cha) {
 /**
  * Check whether is a hidden file
  */
-CF_Bool is_hidden(CF_file* file) {
+CF_Bool is_hidden(CF_File* file) {
 
     return start_with_char(file->basename, '.');
 }

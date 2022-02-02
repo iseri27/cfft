@@ -48,8 +48,8 @@ int main(int argc, char *argv[]) {
     CF_FILE_copy(CF_ARRAY_get(array, chosen), 
             CF_ARRAY_get(array, chosen)->basename, True);
     
-    CF_FILE_free(template_dir);
-    CF_ARRAY_free(array);
+    CF_FILE_free(&template_dir);
+    CF_ARRAY_free(&array);
 
     return 0;
 }

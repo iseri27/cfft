@@ -14,7 +14,7 @@ void wait_a_char();
 /**
  * Check whether is a hidden file
  */
-CF_Bool is_hidden(CF_file* file);
+CF_Bool is_hidden(CF_File* file);
 
 /**
  * Check file whether exists
