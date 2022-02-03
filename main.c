@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ncurses.h>
 
 char buf1[255], buf2[255];
 
@@ -11,6 +12,11 @@ void display_files(CF_Array*);
 int compare(CF_File*, CF_File*);
 
 int main(int argc, char *argv[]) {
+
+    // Some init setting for ncurses
+    initscr();
+    cbreak();
+    keypad(stdscr, TRUE);
 
     CF_Array* array = NULL;
     CF_File* template_dir = NULL;

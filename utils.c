@@ -92,9 +92,26 @@ void path_join(const char* path1, const char* path2, char* resultbuf) {
         len3 = len1 + len2 + 1;
     }
 
-    // for (; k < len2;) {
-    //     resultbuf[len3++] = path2[k++];
-    // }
-
     resultbuf[len3] = '\0';
+}
+
+/**
+ * Create a new window
+ */
+WINDOW *create_newwin( int height, int width, int starty, int startx) {
+    WINDOW* local_win;
+    local_win = newwin(height, width, starty, startx);
+    wrefresh(local_win);
+    box(local_win, 0, 0);
+    wrefresh(local_win);
+    return local_win;
+}
+
+/**
+ * Destroy a window
+ */
+void destroy_win(WINDOW *local_win) {
+    wborder(local_win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+    wrefresh(local_win);
+    delwin(local_win);
 }
