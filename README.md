@@ -5,20 +5,26 @@ CFFT works in terminal. It has a curses UI.
 
 # How to Use #
 
-I don't know either, because actually CFFT is just at beginning.
+## Installation ##
 
-# Source Code #
-The source code is consists of 3 main files: main.c, cf.c, utils.c
-and 2 headers cf.h and utils.h which contains the prototypes of functions
-in cf.c and utils.c.
+### From Source Code ###
+1. Download this repo at your wanted path
+  ```
+  git clone https://github.com/Corona09/cfft.git
+  ```
+2. run makefile
+  ```Make
+  sudo make install
+  ```
+3. Put your template file in `~/Templates`
+  Of course, you can change it in `config.h`
 
-## main.c ##
-Main working flow for cfft.
+4. In terminal, run `cfft`, and you can create file from template
+in current working directory now.
 
-## cf.c ##
-Some functions related to file operations.
+### From AUR ###
+You cannot install it from AUR because I haven't upload it right now :)
 
-And there are some important struct defined in cf.h
-
-## utils.c ##
-Some utils, such as string related functions.
+# Bug Report #
+If you don't want to use Github Issues,
+you can contact me via Corona09@163.com
