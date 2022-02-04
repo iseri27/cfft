@@ -35,10 +35,40 @@ void path_join(const char* path1, const char* path2, char* resultbuf);
 /**
  * Create a new window
  */
-WINDOW *create_newwin(int rows, int cols, int start_row, int start_col);
+WINDOW *create_newwin(CF_Window* cfw);
 
 /**
  * Destroy a window
  */
 void destroy_win(WINDOW *local_win);
+
+/**
+ * Check file's name
+ */
+CF_Bool check_file_name(char* basename);
+
+/**
+ * Parse a string to Int
+ */
+CF_Integer parseInt(char* str);
+
+/**
+ * Compare two strings
+ */
+int str_compare(CF_File*, CF_File*);
+
+/**
+ * Get icon of file
+ */
+void get_icon(CF_File*, char icon[]);
+
+/**
+ * Delete tags in string
+ */
+void delete_tag(char* str);
+
+/**
+ * Judge if is a text file
+ */
+CF_Bool is_text_file(CF_File* cff);
 #endif

@@ -28,3 +28,29 @@ You cannot install it from AUR because I haven't upload it right now :)
 # Bug Report #
 If you don't want to use Github Issues,
 you can contact me via Corona09@163.com
+
+---
+
+1. `win_title`
+    - cols = win_title.cols
+    - rows = win_title.rows
+    - start_col = PADDING_LEFT
+    - start_row = PADDING_TOP
+2. `win_list`
+    - columns = win_title.cols
+    - rows = LINES - PADDING_TOP - MARGIN_INTERVAL - PADDING_BOTTOM
+    - start_col = PADDING_LEFT
+    - start_row = PADDING_TOP + win_title.rows + MARGIN_INTERVAL
+3. `win_preview`
+    - start_col = PADDING_LEFT + win_title.cols + MARGIN_INTERVAL
+    - start_row = PADDING_TOP
+4. `win_input`
+    - cols = COLS - PADDING_LEFT - PADDING_RIGHT
+    - rows = 3
+    - start_col = PADDING_LEFT
+    - start_row = (LINES - rows) / 2
+5. `win_msg`
+    - cols = COLS - PADDING_LEFT - PADDING_RIGHT
+    - rows = 3
+    - start_col = PADDING_LEFT
+    - start_row = (LINES - rows) / 2

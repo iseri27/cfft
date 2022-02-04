@@ -6,6 +6,52 @@
 #include "utils.h"
 
 /**********************
+ *  WINDOW OPERATION  *
+ **********************/
+/**
+ * Create a window struct
+ */
+CF_Window* CF_WINDOW_new(CF_Integer rows, CF_Integer cols, CF_Integer start_row, CF_Integer start_col, int border_color, int font_color, const char* title) {
+    CF_Window* cfw = (CF_Window*) calloc(1, sizeof(CF_Window));
+
+    cfw->cols = cols;
+    cfw->rows = rows;
+    cfw->start_col = start_col;
+    cfw->start_row = start_row;
+    cfw->border_color = border_color;
+    cfw->font_color = font_color;
+    cfw->win = NULL;
+    
+    if (title == NULL) {
+        cfw->title = NULL;
+    } else {
+        const int len = strlen(title);
+        cfw->title = (char*) calloc(len + 1, sizeof(char));
+        strcpy(cfw->title, title);
+    }
+
+    return cfw;
+}
+
+/**
+ * Release an CF_Window pointer
+ * and free its spaces
+ */
+void CF_WINDOW_free(CF_Window** cfw) {
+    if ((*cfw)->title != NULL) {
+        free((*cfw)->title);
+    }
+
+    if ((*cfw)->win != NULL) {
+        destroy_win((*cfw)->win);
+    }
+
+    free(*cfw);
+
+    *cfw = NULL;
+}
+
+/**********************
  *  ARRAY OPERATION   *
  **********************/
 /**
@@ -58,7 +104,7 @@ CF_Bool CF_ARRAY_add(CF_Array* arr, CF_File* cff) {
         const int newlen = (int)(1.5 * arr->capacity);
         CF_File** lt = realloc(arr->lt, newlen);
         if (lt == NULL) {
-            return False;
+            return CF_False;
         } else {
             arr->capacity = newlen;
         }
@@ -66,7 +112,7 @@ CF_Bool CF_ARRAY_add(CF_Array* arr, CF_File* cff) {
     }
 
     arr->lt[arr->size++] = cff;
-    return True;
+    return CF_True;
 }
 
 /**
@@ -74,7 +120,7 @@ CF_Bool CF_ARRAY_add(CF_Array* arr, CF_File* cff) {
  */
 CF_Bool CF_ARRAY_del(CF_Array* arr, CF_Integer index) {
     if (index < 0 || index >= arr->size) {
-        return False;
+        return CF_False;
     }
 
     for (int i = index; i < arr->size - 1; i++) {
@@ -83,7 +129,7 @@ CF_Bool CF_ARRAY_del(CF_Array* arr, CF_Integer index) {
 
     arr->size--;
 
-    return True;
+    return CF_True;
 }
 
 /**
@@ -179,7 +225,7 @@ CF_Bool CF_FILE_get_info(const char* path, const char* basename, CF_File* cff) {
     strcpy(cff->basename, basename);
     path_join(path, basename, cff->fullpath);
     
-    return True;
+    return CF_True;
 }
 
 /**
@@ -196,7 +242,7 @@ CF_Bool CF_FILE_list_directory(CF_File* cffp, CF_Bool show_hidden, CF_Array* arr
 
     if (directory) {
         while ((dir = readdir(directory)) != NULL) {
-            if (show_hidden == False && dir->d_name[0] == '.') {
+            if (show_hidden == CF_False && dir->d_name[0] == '.') {
                 continue;
             }
 
@@ -206,10 +252,10 @@ CF_Bool CF_FILE_list_directory(CF_File* cffp, CF_Bool show_hidden, CF_Array* arr
         }
         closedir(directory);
     } else {
-        return False;
+        return CF_False;
     }
 
-    return True;
+    return CF_True;
 }
 
 /**
@@ -220,8 +266,8 @@ CF_Bool CF_FILE_copy(CF_File* src, char* dest, CF_Bool force_copy) {
     FILE* fout;
     
     // Check if file already exists.
-    if (force_copy == False && is_exist(dest) == True) {
-        return False;
+    if (force_copy == CF_False && is_exist(dest) == CF_True) {
+        return CF_False;
     }
 
     fin = fopen(src->fullpath, "rb");
@@ -236,7 +282,7 @@ CF_Bool CF_FILE_copy(CF_File* src, char* dest, CF_Bool force_copy) {
     fclose(fin);
     fclose(fout);
 
-    return True;
+    return CF_True;
 }
 
 /**

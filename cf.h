@@ -1,3 +1,5 @@
+#include <curses.h>
+#include <ncurses.h>
 #include <strings.h>
 
 #ifndef CFFT_H
@@ -11,8 +13,8 @@ typedef int CF_Bool;
 typedef int CF_Integer;
 typedef int CF_Error;
 
-static const CF_Bool True = 1;
-static const CF_Bool False = 0;
+static const CF_Bool CF_True = 1;
+static const CF_Bool CF_False = 0;
 
 typedef struct CF_File {
     char* path;
@@ -28,6 +30,36 @@ typedef struct CF_Array {
     CF_Size capacity;
     CF_Integer (*compare)(CF_File*, CF_File*);
 } CF_Array;
+
+typedef struct CF_Window {
+    CF_Integer  cols, rows;
+    CF_Integer  start_col, start_row;
+    int border_color, font_color;
+    WINDOW* win;
+    char* title;
+} CF_Window;
+
+/**********************
+ *  WINDOW OPERATION  *
+ **********************/
+/**
+ * Create a window struct
+ */
+CF_Window* CF_WINDOW_new(
+        CF_Integer rows,
+        CF_Integer cols,
+        CF_Integer start_row,
+        CF_Integer start_col,
+        int border_color,
+        int font_color,
+        const char* title
+    );
+
+/**
+ * Release an CF_Window pointer
+ * and free its spaces
+ */
+void CF_WINDOW_free(CF_Window** cfw);
 
 /**********************
  *  ARRAY OPERATION   *
