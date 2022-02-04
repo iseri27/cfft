@@ -35,7 +35,7 @@ void path_join(const char* path1, const char* path2, char* resultbuf);
 /**
  * Create a new window
  */
-WINDOW *create_newwin(int height, int width, int starty, int startx);
+WINDOW *create_newwin(int rows, int cols, int start_row, int start_col);
 
 /**
  * Destroy a window

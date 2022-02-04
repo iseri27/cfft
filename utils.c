@@ -98,9 +98,9 @@ void path_join(const char* path1, const char* path2, char* resultbuf) {
 /**
  * Create a new window
  */
-WINDOW *create_newwin( int height, int width, int starty, int startx) {
+WINDOW *create_newwin( int rows, int cols, int start_row, int start_col) {
     WINDOW* local_win;
-    local_win = newwin(height, width, starty, startx);
+    local_win = newwin(rows, cols, start_row, start_col);
     wrefresh(local_win);
     box(local_win, 0, 0);
     wrefresh(local_win);

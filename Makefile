@@ -2,7 +2,7 @@ SOURCES := $(wildcard ./*.c)
 HEADERS := $(wildcard ./*.h)
 OBJECTS := $(patsubst ./%.c, %.o, $(SOURCES))
 CC = gcc
-CFLAGS += -std=c11 -g -DDEBUG
+CFLAGS += -std=c11 -lcurses -g -DDEBUG
 TARGET = cfft
 
 $(TARGET): $(OBJECTS) $(HEADERS)
