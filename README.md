@@ -31,7 +31,7 @@ You cannot install it from AUR because I haven't upload it right now :)
 - [x] Better reminder(Such as warning or success notification)
 - [ ] Responsive Window
 - [x] File type judgement
-- [ ] Forbidden cfft run in templates dir
+- [x] Forbidden cfft run in templates dir
 - [ ] configuration from file
 
 # Bug Report #

@@ -63,6 +63,12 @@ CF_Integer parseInt(char* str);
 int str_compare(CF_File*, CF_File*);
 
 /**
+ * Delete empty character in the beginning
+ * and the end of a string
+ */
+void trim(char str[]);
+
+/**
  * Get icon of file
  */
 void get_icon(CF_File*, char icon[]);

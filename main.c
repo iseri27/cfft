@@ -20,7 +20,8 @@ CF_Array* array = NULL;
 CF_File* template_dir = NULL;
 
 void init(int argc, char* argv[]);
-void load_config();
+CF_Bool check_env(char* errmsg);
+void load_window();
 
 void window_cfft(CF_Window* cfw);
 void window_list(CF_Window* cfw, CF_Array* array, int selected);
@@ -29,17 +30,38 @@ void window_input(CF_Window* cfw, char* input_buffer, char* prompt);
 void window_msg(CF_Window* cfw, const char* title, const char* msg, CF_Integer color_title, CF_Integer color_font);
 
 int main(int argc, char *argv[]) {
-
     init(argc, argv);
+
+    while (check_env(buf1) != CF_True) {
+        win_msg = CF_WINDOW_new(
+                3, 
+                COLS - PADDING_LEFT - PADDING_RIGHT - 5 * MARGIN_INTERVAL, 
+                (LINES - 3) / 3,
+                PADDING_LEFT + 5 * MARGIN_INTERVAL, 
+                COLOR_WHITE,
+                COLOR_WHITE,
+                NULL
+            );
+
+        window_msg(win_msg, "Error", buf1, COLOR_PAIR_WARNING, COLOR_PAIR_ERROR);
+
+        int ch = getchar();
+        CF_WINDOW_free(&win_msg);
+
+        // When press ESC, exit the program
+        if (ch == 27) {
+            exit(0);
+        }
+    }
+
+    memset(buf1, 0, sizeof(buf1));
 
     int selected = 0;
     int ch;
     CF_Bool done = CF_False;
 
     while (CF_True) {
-        load_config();
-
-
+        load_window();
 
         window_cfft(win_title);
         window_list(win_list, array, selected);
@@ -118,7 +140,6 @@ int main(int argc, char *argv[]) {
 }
 
 void init(int argc, char* argv[]) {/*{{{*/
-
     // Enable Characters except English
     setlocale(LC_ALL, "");
 
@@ -129,23 +150,59 @@ void init(int argc, char* argv[]) {/*{{{*/
     start_color();
 
     // Define COLOR
-    init_color(COLOR_BLACK, 100, 100, 100); // rgb(100, 100, 100)
-    init_color(COLOR_YELLOW, 250, 144, 22); // rgb(250, 144,  22)
-}/*}}}*/
-
-void load_config() {/*{{{*/
-
-    PADDING_TOP = 3;
-    PADDING_LEFT = 3;
-    PADDING_RIGHT = 3;
-    PADDING_BOTTOM = 5;
-    MARGIN_INTERVAL = 1;
+    init_color(COLOR_BLACK , 100, 100, 100); // rgb(100, 100, 100)
+    init_color(COLOR_YELLOW, 250, 144,  22); // rgb(250, 144,  22)
 
     // format: init_pair(index, fg, bg)
-    init_pair(COLOR_PAIR_SUCCESS, COLOR_GREEN, COLOR_BG);
-    init_pair(COLOR_PAIR_ERROR, COLOR_RED, COLOR_BG);
-    init_pair(COLOR_PAIR_INFO, COLOR_CYAN, COLOR_BG);
-    init_pair(COLOR_PAIR_WARNING, COLOR_YELLOW, COLOR_BG);
+    init_pair(COLOR_PAIR_SUCCESS, COLOR_GREEN , COLOR_BACKGROUND);
+    init_pair(COLOR_PAIR_ERROR  , COLOR_RED   , COLOR_BACKGROUND);
+    init_pair(COLOR_PAIR_INFO   , COLOR_CYAN  , COLOR_BACKGROUND);
+    init_pair(COLOR_PAIR_WARNING, COLOR_YELLOW, COLOR_BACKGROUND);
+}/*}}}*/
+
+CF_Bool check_env(char* errmsg) {/*{{{*/
+    char* cmd = (char*) calloc(31, sizeof(char));
+    char* pwd = (char*) calloc(255, sizeof(char));
+    char* tmp_buf = (char*) calloc(255, sizeof(tmp_buf));
+
+    sprintf(cmd, "pwd");
+    execute_cmd(cmd, pwd, 255);
+    path_join(HOME_DIR, TEMPLATES_DIR, tmp_buf);
+
+    if (strcmp(pwd, tmp_buf) == 0) {
+        sprintf(errmsg, "Error %d: CFFT cannot run under TEMPLATE DIR, Press ESC to exit", ERROR_INVALID_CWD);
+        free(tmp_buf);
+        free(pwd);
+        free(cmd);
+        return CF_False;
+    }
+
+    int row, col;
+    getmaxyx(stdscr, row, col);
+
+    if (row < MIN_WINDOW_ROW) {
+        sprintf(errmsg, "Error %d: Window height is too small!", ERROR_INVALID_HEIGHT);
+        free(tmp_buf);
+        free(pwd);
+        free(cmd);
+        return CF_False;
+    }
+
+    if (col < MIN_WINDOW_COL) {
+        sprintf(errmsg, "Error %d: Window width is too small!", ERROR_INVALID_WIDTH);
+        free(tmp_buf);
+        free(pwd);
+        free(cmd);
+        return CF_False;
+    }
+
+    free(tmp_buf);
+    free(pwd);
+    free(cmd);
+    return CF_True;
+}/*}}}*/
+
+void load_window() {/*{{{*/
     
     win_title = CF_WINDOW_new(
             5,
@@ -176,6 +233,7 @@ void load_config() {/*{{{*/
             COLOR_WHITE,
             "Preview"
         );
+
     win_input = CF_WINDOW_new(
             3, 
             COLS - PADDING_LEFT - PADDING_RIGHT - 5 * MARGIN_INTERVAL, 
@@ -185,6 +243,7 @@ void load_config() {/*{{{*/
             COLOR_WHITE,
             NULL
         );
+
     win_msg = CF_WINDOW_new(
             3, 
             win_input->cols, 

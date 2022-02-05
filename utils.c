@@ -178,6 +178,36 @@ int str_compare(CF_File* cff1, CF_File* cff2) {
 }
 
 /**
+ * Delete empty character in the beginning
+ * and the end of a string
+ */
+void trim(char str[]) {
+    int len = strlen(str);
+    for (int i = len - 1; i >= 0; i--) {
+        if (!isspace(str[i])) {
+            break;
+        }
+        str[i] = '\0';
+    }
+
+    len = strlen(str);
+
+    int k = 0;
+    for (int i = 0; i < len; i++) {
+        if (!isspace(str[i])) {
+            break;
+        }
+        k++;
+    }
+
+    for (int i = 0; i < len - k; i++) {
+        str[i] = str[i+k];
+    }
+
+    str[len - k] = '\0';
+}
+
+/**
  * Get icon of file
  */
 void get_icon(CF_File* cfw, char icon[]) {
@@ -229,6 +259,7 @@ CF_Bool execute_cmd(const char* cmd, char* result, int max_result_len) {
     }
 
     fgets(result, max_result_len * sizeof(char), fp);
+    trim(result);
 
     return CF_True;
 }
