@@ -1,5 +1,6 @@
 #include "cf.h"
 #include <curses.h>
+#include <string.h>
 
 /**
  * Version Information
@@ -11,6 +12,11 @@ static const char* VERSION = "0.0.1";
  */
 static const char* HOME_DIR = "/home/corona";
 static const char* TEMPLATES_DIR = "Templates";
+
+/**
+ * Chinese character length
+ */
+static const CF_Integer ZH_CHAR_LEN = strlen("正");
 
 /**
  * Invalid Characters

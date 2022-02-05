@@ -94,6 +94,14 @@ CF_Bool has_substring(const char* str, const char* sub);
 CF_Bool is_text_file(CF_File* cff);
 
 /**
+ * Cut string
+ * Characters will be cut until its length 
+ * will be less than **cut_len**
+ * Strings after cut will be stored in dest
+ */
+void str_cut(char* dest, const char* src, const int cut_len);
+
+/**
  * Safely(not beyond borders) print a string
  * on a window
  */

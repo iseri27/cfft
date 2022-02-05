@@ -310,15 +310,54 @@ CF_Bool is_text_file(CF_File* cff) {
 }
 
 /**
+ * Cut string
+ * Characters will be cut until its length 
+ * will be less than **cut_len**
+ * Strings after cut will be stored in dest
+ */
+void str_cut(char* dest, const char* src, const int cut_len) {
+    strcpy(dest, src);
+
+    const int slen = strlen(dest);
+
+    if (slen <= cut_len) {
+        return;
+    }
+
+    if (dest[cut_len - 1] >= 0) {
+        for (int i = cut_len - 1; i < slen; i++) {
+            dest[i] = '\0';
+        }
+        return;
+    }
+
+    int k = cut_len - 1;
+    while (dest[k] < 0 && k >= 0) {
+        k--;
+    }
+
+    k++;
+
+    while (k + ZH_CHAR_LEN - 1 <= cut_len - 1) {
+        k += ZH_CHAR_LEN;
+    }
+
+    for (; k < slen; k++) {
+        dest[k] = '\0';
+    }
+}
+
+/**
  * Safely(not beyond borders) print a string
  * on a window
  */
 void safe_wprint(CF_Window* cfw, int row, int col, const char* str) {
+    const int delta_len = 3;
     const int slen = strlen(str);
-    if (col + slen - 1 < cfw->cols) {
-        mvwprintw(cfw->win, row, col, "%s", str);
-    } else {
-        
-    }
+    char* tmp = (char*) calloc(strlen(str) + 2, sizeof(char));
+    str_cut(tmp, str, cfw->cols - delta_len - col);
+
+    mvwprintw(cfw->win, row, col, "%s", tmp);
+    free(tmp);
 }
 

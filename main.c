@@ -150,7 +150,6 @@ void init(int argc, char* argv[]) {/*{{{*/
     start_color();
 
     // Define COLOR
-    init_color(COLOR_BLACK , 100, 100, 100); // rgb(100, 100, 100)
     init_color(COLOR_YELLOW, 250, 144,  22); // rgb(250, 144,  22)
 
     // format: init_pair(index, fg, bg)
@@ -331,11 +330,11 @@ void window_preview(CF_Window* cfw, CF_File* cff) {/*{{{*/
                 buf1[len - 1] = '\0';
             }
 
-            mvwprintw(cfw->win, row++, 2, "%s", buf1);
-
             if (row >= cfw->rows - 2) {
                 break;
             }
+
+            safe_wprint(cfw, row++, 2, buf1);
         }
 
         fclose(fin);
