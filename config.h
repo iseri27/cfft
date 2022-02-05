@@ -5,7 +5,7 @@
 /**
  * Version Information
  */
-static const char* VERSION = "0.0.1";
+static const char* VERSION = "0.0.2";
 
 /**
  * Template file directory
