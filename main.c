@@ -10,7 +10,7 @@
 
 char buf1[255], buf2[255], buf3[255], errmsg[255];
 
-CF_Window* win_title   = NULL;
+CF_Window* win_cfft   = NULL;
 CF_Window* win_list    = NULL;
 CF_Window* win_preview = NULL;
 CF_Window* win_msg     = NULL;
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
     while (CF_True) {
         load_window();
 
-        window_cfft(win_title);
+        window_cfft(win_cfft);
         window_list(win_list, array, selected);
         window_preview(win_preview, CF_ARRAY_get(array, selected));
 
@@ -124,7 +124,7 @@ int main(int argc, char *argv[]) {
             // do nothing
         }
 
-        CF_WINDOW_free(&win_title);
+        CF_WINDOW_free(&win_cfft);
         CF_WINDOW_free(&win_list);
         CF_WINDOW_free(&win_preview);
 
@@ -204,8 +204,8 @@ CF_Bool check_env(char* errmsg) {/*{{{*/
 
 void load_window() {/*{{{*/
     
-    win_title = CF_WINDOW_new(
-            5,
+    win_cfft = CF_WINDOW_new(
+            8,
             30,
             PADDING_TOP,
             PADDING_LEFT,
@@ -215,9 +215,9 @@ void load_window() {/*{{{*/
         );
 
     win_list = CF_WINDOW_new(
-            LINES - PADDING_TOP - win_title->rows - MARGIN_INTERVAL - PADDING_BOTTOM, 
-            win_title->cols, 
-            PADDING_TOP + win_title->rows + MARGIN_INTERVAL,
+            LINES - PADDING_TOP - win_cfft->rows - MARGIN_INTERVAL - PADDING_BOTTOM, 
+            win_cfft->cols, 
+            PADDING_TOP + win_cfft->rows + MARGIN_INTERVAL,
             PADDING_LEFT, 
             COLOR_WHITE,
             COLOR_WHITE,
@@ -226,9 +226,9 @@ void load_window() {/*{{{*/
 
     win_preview = CF_WINDOW_new(
             LINES - PADDING_TOP - PADDING_BOTTOM,
-            COLS - PADDING_LEFT - win_title->cols - PADDING_RIGHT,
+            COLS - PADDING_LEFT - win_cfft->cols - PADDING_RIGHT,
             PADDING_TOP,
-            PADDING_LEFT + win_title->cols + MARGIN_INTERVAL,
+            PADDING_LEFT + win_cfft->cols + MARGIN_INTERVAL,
             COLOR_WHITE,
             COLOR_WHITE,
             "Preview"
@@ -267,12 +267,18 @@ void window_cfft(CF_Window* cfw) {/*{{{*/
     char msg[31];
 
     wattron(cfw->win, COLOR_PAIR(COLOR_PAIR_SUCCESS));
-
     sprintf(msg, "CFFT version %s", VERSION);
     int len = strlen(msg);
     mvwprintw(cfw->win, 0, 2, "%s", msg);
-
     wattroff(cfw->win, COLOR_PAIR(COLOR_PAIR_SUCCESS));
+
+    wattron(cfw->win, COLOR_PAIR(COLOR_PAIR_INFO));
+    mvwprintw(cfw->win, 1, 2, "  ____ _____ _____ _____ ");
+    mvwprintw(cfw->win, 2, 2, " / ___|  ___|  ___|_   _|");
+    mvwprintw(cfw->win, 3, 2, "| |   | |_  | |_    | |  ");
+    mvwprintw(cfw->win, 4, 2, "| |___|  _| |  _|   | |  ");
+    mvwprintw(cfw->win, 5, 2, " \\____|_|   |_|     |_|  ");
+    wattroff(cfw->win, COLOR_PAIR(COLOR_PAIR_INFO));
 
     wrefresh(cfw->win);
 }/*}}}*/

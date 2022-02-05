@@ -308,3 +308,17 @@ CF_Bool is_text_file(CF_File* cff) {
 
     return ok;
 }
+
+/**
+ * Safely(not beyond borders) print a string
+ * on a window
+ */
+void safe_wprint(CF_Window* cfw, int row, int col, const char* str) {
+    const int slen = strlen(str);
+    if (col + slen - 1 < cfw->cols) {
+        mvwprintw(cfw->win, row, col, "%s", str);
+    } else {
+        
+    }
+}
+

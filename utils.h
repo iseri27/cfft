@@ -92,4 +92,10 @@ CF_Bool has_substring(const char* str, const char* sub);
  * Judge if is a text file
  */
 CF_Bool is_text_file(CF_File* cff);
+
+/**
+ * Safely(not beyond borders) print a string
+ * on a window
+ */
+void safe_wprint(CF_Window* cfw, int row, int col, const char* str);
 #endif
