@@ -1,10 +1,11 @@
 #include "cf.h"
-#include "config.h"
 #include "utils.h"
-#include <stdint.h>
+#include "config.h"
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 #include <ncurses.h>
 
 char buf1[255], buf2[255], buf3[255];
@@ -24,7 +25,7 @@ CF_Window* win_input   = NULL;
 CF_Array* array = NULL;
 CF_File* template_dir = NULL;
 
-void load_page();
+void init();
 
 void window_cfft(CF_Window* cfw);
 void window_list(CF_Window* cfw, CF_Array* array, int selected);
@@ -33,6 +34,8 @@ void window_input(CF_Window* cfw, char* input_buffer, char* prompt);
 void window_msg(CF_Window* cfw, const char* title, const char* msg);
 
 int main(int argc, char *argv[]) {
+    setlocale(LC_ALL, "");
+
     // Some init setting for ncurses
     initscr();
     cbreak();
@@ -44,7 +47,7 @@ int main(int argc, char *argv[]) {
     CF_Bool done = CF_False;
 
     while (CF_True) {
-        load_page();
+        init();
 
         window_cfft(win_title);
         window_list(win_list, array, selected);
@@ -132,7 +135,8 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-void load_page() {/*{{{*/
+void init() {/*{{{*/
+
     PADDING_TOP = 3;
     PADDING_LEFT = 3;
     PADDING_RIGHT = 3;
@@ -192,6 +196,7 @@ void load_page() {/*{{{*/
     template_dir = CF_FILE_new(HOME_DIR, TEMPLATES_DIR);
     array = CF_ARRAY_new(DEFAULT_ARRAY_LENGTH);
     CF_FILE_list_directory(template_dir, CF_False, array);
+
     array->compare = str_compare;
     CF_ARRAY_sort(array);
 }/*}}}*/
@@ -242,29 +247,24 @@ void window_list(CF_Window* cfw, CF_Array* array, int selected) {/*{{{*/
 void window_preview(CF_Window* cfw, CF_File* cff) {/*{{{*/
     cfw->win = create_newwin(cfw);
     
-    FILE* fp = NULL;
-    fp = fopen(cff->fullpath, "r");
+    FILE* fin = NULL;
+    fin = fopen(cff->fullpath, "r");
 
-    int ch;
-    int row = 1, col = 1;
-
-    while ((ch = fgetc(fp)) != EOF) {
-        if (col >= cfw->cols) {
-            continue;
+    int row = 1;
+    while ((fgets(buf1, cfw->cols - 2, fin)) != NULL) {
+        int len = strlen(buf1);
+        if (buf1[len - 1] == '\n') {
+            buf1[len - 1] = '\0';
         }
 
-        if (row >= cfw->rows - 1) {
+        mvwprintw(cfw->win, row++, 1, "%s", buf1);
+
+        if (row >= cfw->rows - 2) {
             break;
         }
-
-        if (ch == '\n') {
-            row++;
-            col = 1;
-        } else {
-            mvwprintw(cfw->win, row, col, "%c", ch);
-            col++;
-        }
     }
+
+    fclose(fin);
 
     wrefresh(cfw->win);
 }/*}}}*/
