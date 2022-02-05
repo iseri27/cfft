@@ -26,7 +26,7 @@ in current working directory now.
 You cannot install it from AUR because I haven't upload it right now :)
 
 # To do #
-- [ ] Chinese and Nerd Font Support
+- [x] Chinese and Nerd Font Support
 - [ ] Strage color
 - [ ] Better reminder(Such as warning or success notification)
 

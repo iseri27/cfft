@@ -156,8 +156,7 @@ int str_compare(CF_File* cff1, CF_File* cff2) {
  * Get icon of file
  */
 void get_icon(CF_File* cfw, char icon[]) {
-    // strcpy(icon, "");
-    strcpy(icon, "[F]");
+    strcpy(icon, "");
 }
 
 /**
