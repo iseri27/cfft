@@ -50,6 +50,7 @@ int main(int argc, char *argv[]) {
 
         // When press ESC, exit the program
         if (ch == 27) {
+            curs_set(1);
             exit(0);
         }
     }
@@ -150,7 +151,8 @@ void init(int argc, char* argv[]) {
     start_color();
 
     // Define COLOR
-    init_color(COLOR_YELLOW, 250, 144,  22); // rgb(250, 144,  22)
+    // init_color(COLOR_BLACK, 100, 100, 100);
+    // init_color(COLOR_YELLOW, 255, 214,  102); // rgb(250, 144,  22)
 
     // format: init_pair(index, fg, bg)
     init_pair(COLOR_PAIR_SUCCESS, COLOR_GREEN , COLOR_BACKGROUND);
@@ -169,7 +171,8 @@ CF_Bool check_env(char* errmsg) {
     path_join(HOME_DIR, TEMPLATES_DIR, tmp_buf);
 
     if (strcmp(pwd, tmp_buf) == 0) {
-        sprintf(errmsg, "Error %d: CFFT cannot run under TEMPLATE DIR, Press ESC to exit", ERROR_INVALID_CWD);
+        curs_set(0);
+        sprintf(errmsg, "Error %d: CFFT Cannot Run Under TEMPLATE DIR. Please Press ESC to Exit.", ERROR_INVALID_CWD);
         free(tmp_buf);
         free(pwd);
         free(cmd);
