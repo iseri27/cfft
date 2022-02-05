@@ -129,7 +129,6 @@ int main(int argc, char *argv[]) {
         CF_WINDOW_free(&win_list);
         CF_WINDOW_free(&win_preview);
 
-
         if (done == CF_True) {
             break;
         }
@@ -275,11 +274,11 @@ void window_cfft(CF_Window* cfw) {
     wattroff(cfw->win, COLOR_PAIR(COLOR_PAIR_SUCCESS));
 
     wattron(cfw->win, COLOR_PAIR(COLOR_PAIR_INFO));
-    mvwprintw(cfw->win, 1, 2, "  ____ _____ _____ _____ ");
-    mvwprintw(cfw->win, 2, 2, " / ___|  ___|  ___|_   _|");
-    mvwprintw(cfw->win, 3, 2, "| |   | |_  | |_    | |  ");
-    mvwprintw(cfw->win, 4, 2, "| |___|  _| |  _|   | |  ");
-    mvwprintw(cfw->win, 5, 2, " \\____|_|   |_|     |_|  ");
+    mvwprintw(cfw->win, 1, 2, "   ____ _____ _____ _____ ");
+    mvwprintw(cfw->win, 2, 2, "  / ___|  ___|  ___|_   _|");
+    mvwprintw(cfw->win, 3, 2, " | |   | |_  | |_    | |  ");
+    mvwprintw(cfw->win, 4, 2, " | |___|  _| |  _|   | |  ");
+    mvwprintw(cfw->win, 5, 2, "  \\____|_|   |_|     |_|  ");
     wattroff(cfw->win, COLOR_PAIR(COLOR_PAIR_INFO));
 
     wrefresh(cfw->win);
@@ -320,6 +319,11 @@ void window_list(CF_Window* cfw, CF_Array* array, int selected) {
 }
 
 void window_preview(CF_Window* cfw, CF_File* cff) {
+    if (cfw->cols < MIN_PREVIEW_WIN_WIDTH) {
+        cfw->win = create_empty_win(cfw);
+        return;
+    }
+
     cfw->win = create_newwin(cfw);
 
     if (is_text_file(cff) == CF_True) {

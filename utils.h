@@ -35,7 +35,12 @@ void path_join(const char* path1, const char* path2, char* resultbuf);
 /**
  * Create a new window
  */
-WINDOW *create_newwin(CF_Window* cfw);
+WINDOW* create_newwin(CF_Window* cfw);
+
+/**
+ * Create an empty area
+ */
+WINDOW* create_empty_win(CF_Window* cfw);
 
 /**
  * Destroy a window

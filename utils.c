@@ -119,10 +119,25 @@ WINDOW *create_newwin(CF_Window* cfw) {
 }
 
 /**
+ * Create an empty area
+ */
+WINDOW* create_empty_win(CF_Window* cfw) {
+    WINDOW* local_win;
+    local_win = newwin(cfw->rows, cfw->cols, cfw->start_row, cfw->start_col);
+    wrefresh(local_win);
+
+    return local_win;
+}
+
+/**
  * Destroy a window
  */
 void destroy_win(WINDOW *local_win) {
     wborder(local_win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+    wclear(local_win);
+    // for (int row = 0; row < local; inc-expression) {
+    // statements
+    // }
     wrefresh(local_win);
     delwin(local_win);
 }

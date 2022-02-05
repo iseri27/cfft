@@ -22,12 +22,12 @@ static const CF_Integer ZH_CHAR_LEN = strlen("正");
  * Invalid Characters
  */
 static const char* INVALID_CHARS = "/\\!?()[]{}*@#$%& ><~`"; 
-
 /**
  * Window Config
  */
 static const CF_Integer MIN_WINDOW_ROW = 300;
 static const CF_Integer MIN_WINDOW_COL = 600;
+static const CF_Integer MIN_PREVIEW_WIN_WIDTH = 20;
 
 static CF_Integer PADDING_TOP     = 3;
 static CF_Integer PADDING_LEFT    = 3;
