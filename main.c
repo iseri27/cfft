@@ -19,7 +19,8 @@ CF_Window* win_input   = NULL;
 CF_Array* array = NULL;
 CF_File* template_dir = NULL;
 
-void init();
+void init(int argc, char* argv[]);
+void load_config();
 
 void window_cfft(CF_Window* cfw);
 void window_list(CF_Window* cfw, CF_Array* array, int selected);
@@ -28,20 +29,15 @@ void window_input(CF_Window* cfw, char* input_buffer, char* prompt);
 void window_msg(CF_Window* cfw, const char* title, const char* msg, CF_Integer color_title, CF_Integer color_font);
 
 int main(int argc, char *argv[]) {
-    setlocale(LC_ALL, "");
 
-    // Some init setting for ncurses
-    initscr();
-    cbreak();
-    keypad(stdscr, TRUE);
-    start_color();
+    init(argc, argv);
 
     int selected = 0;
     int ch;
     CF_Bool done = CF_False;
 
     while (CF_True) {
-        init();
+        load_config();
 
         window_cfft(win_title);
         window_list(win_list, array, selected);
@@ -119,7 +115,23 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-void init() {/*{{{*/
+void init(int argc, char* argv[]) {
+
+    // Enable Characters except English
+    setlocale(LC_ALL, "");
+
+    // Some init setting for ncurses
+    initscr();
+    cbreak();
+    keypad(stdscr, TRUE);
+    start_color();
+
+    // Define COLOR
+    init_color(COLOR_BLACK, 100, 100, 100); // rgb(100, 100, 100)
+    init_color(COLOR_YELLOW, 250, 144, 22); // rgb(250, 144,  22)
+}
+
+void load_config() {/*{{{*/
 
     PADDING_TOP = 3;
     PADDING_LEFT = 3;
