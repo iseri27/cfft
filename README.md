@@ -1,5 +1,6 @@
 # What is CFFT #
-CFFT, Create File From Templates, just like its name -- it lets you create files using certain existed templates.
+CFFT, Create File From Templates, just like its name
+-- it lets you create files using certain existed templates.
 
 CFFT works in terminal. It has a curses UI. 
 
@@ -22,8 +23,13 @@ CFFT works in terminal. It has a curses UI.
 4. In terminal, run `cfft`, and you can create file from template
 in current working directory now.
 
+5. CFFT has **vim-like** key bindings, you can use **h/j/k/l** 
+to control cursor move and choose which template you want to use.
+
 ### From AUR ###
 You cannot install it from AUR because I haven't upload it right now :)
+
+After everything is finished, I will upload it to AUR.
 
 # To do #
 - [x] Chinese and Nerd Font Support
@@ -31,9 +37,10 @@ You cannot install it from AUR because I haven't upload it right now :)
 - [x] Better reminder(Such as warning or success notification)
 - [x] File type judgement
 - [x] Forbidden cfft run in templates dir
-- [ ] configuration from file
 - [ ] Responsive Window
 - [ ] Window size check
+- [ ] User guide in UI
+- [ ] configuration from file
 
 # Bug Report #
 If you don't want to use Github Issues,
