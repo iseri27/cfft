@@ -30,7 +30,9 @@ You cannot install it from AUR because I haven't upload it right now :)
 - [x] Strage color
 - [x] Better reminder(Such as warning or success notification)
 - [ ] Responsive Window
-- [ ] File type judgement
+- [x] File type judgement
+- [ ] Forbidden cfft run in templates dir
+- [ ] configuration from file
 
 # Bug Report #
 If you don't want to use Github Issues,

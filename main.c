@@ -39,6 +39,8 @@ int main(int argc, char *argv[]) {
     while (CF_True) {
         load_config();
 
+
+
         window_cfft(win_title);
         window_list(win_list, array, selected);
         window_preview(win_preview, CF_ARRAY_get(array, selected));
@@ -115,7 +117,7 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-void init(int argc, char* argv[]) {
+void init(int argc, char* argv[]) {/*{{{*/
 
     // Enable Characters except English
     setlocale(LC_ALL, "");
@@ -129,7 +131,7 @@ void init(int argc, char* argv[]) {
     // Define COLOR
     init_color(COLOR_BLACK, 100, 100, 100); // rgb(100, 100, 100)
     init_color(COLOR_YELLOW, 250, 144, 22); // rgb(250, 144,  22)
-}
+}/*}}}*/
 
 void load_config() {/*{{{*/
 
