@@ -29,7 +29,7 @@ void window_preview(CF_Window* cfw, CF_File* cff);
 void window_input(CF_Window* cfw, char* input_buffer, char* prompt);
 void window_msg(CF_Window* cfw, const char* title, const char* msg, CF_Integer color_title, CF_Integer color_font);
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {/*{{{*/
     init(argc, argv);
 
     while (check_env(buf1) != CF_True) {
@@ -137,7 +137,7 @@ int main(int argc, char *argv[]) {
     endwin();
 
     return 0;
-}
+}/*}}}*/
 
 void init(int argc, char* argv[]) {/*{{{*/
     // Enable Characters except English
@@ -342,7 +342,7 @@ void window_preview(CF_Window* cfw, CF_File* cff) {/*{{{*/
         char* preview  = (char*) calloc(255, sizeof(char));
         char* cmd = (char*) calloc(255, sizeof(char));
         
-        sprintf(cmd, "file %s", cff->fullpath);
+        sprintf(cmd, "file \"%s\"", cff->fullpath);
         execute_cmd(cmd, preview, 255);
 
         wattron(cfw->win, COLOR_PAIR(COLOR_PAIR_INFO));

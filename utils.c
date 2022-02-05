@@ -298,7 +298,12 @@ CF_Bool is_text_file(CF_File* cff) {
     int max_result_len = 255;
     char* resultbuf = (char*) calloc(max_result_len, sizeof(char));
     char* cmd = (char*) calloc(255, sizeof(char));
-    sprintf(cmd, "file %s", cff->fullpath);
+    sprintf(cmd, "file \"%s\"", cff->fullpath);
+
+    // FILE* fout = fopen("/home/corona/Downloads/tmp.txt", "w");
+    // fprintf(fout, "Command: %s\n", cmd);
+    // fclose(fout);
+
     execute_cmd(cmd, resultbuf, max_result_len);
 
     CF_Bool ok = has_substring(resultbuf, "text");
