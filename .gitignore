@@ -8,4 +8,6 @@ cf
 test
 
 *.sh
-*tex
+*.tex
+*.docx
+*\[\[*\]\]
