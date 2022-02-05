@@ -29,7 +29,7 @@ void window_preview(CF_Window* cfw, CF_File* cff);
 void window_input(CF_Window* cfw, char* input_buffer, char* prompt);
 void window_msg(CF_Window* cfw, const char* title, const char* msg, CF_Integer color_title, CF_Integer color_font);
 
-int main(int argc, char *argv[]) {/*{{{*/
+int main(int argc, char *argv[]) {
     init(argc, argv);
 
     while (check_env(buf1) != CF_True) {
@@ -137,9 +137,9 @@ int main(int argc, char *argv[]) {/*{{{*/
     endwin();
 
     return 0;
-}/*}}}*/
+}
 
-void init(int argc, char* argv[]) {/*{{{*/
+void init(int argc, char* argv[]) {
     // Enable Characters except English
     setlocale(LC_ALL, "");
 
@@ -157,9 +157,9 @@ void init(int argc, char* argv[]) {/*{{{*/
     init_pair(COLOR_PAIR_ERROR  , COLOR_RED   , COLOR_BACKGROUND);
     init_pair(COLOR_PAIR_INFO   , COLOR_CYAN  , COLOR_BACKGROUND);
     init_pair(COLOR_PAIR_WARNING, COLOR_YELLOW, COLOR_BACKGROUND);
-}/*}}}*/
+}
 
-CF_Bool check_env(char* errmsg) {/*{{{*/
+CF_Bool check_env(char* errmsg) {
     char* cmd = (char*) calloc(31, sizeof(char));
     char* pwd = (char*) calloc(255, sizeof(char));
     char* tmp_buf = (char*) calloc(255, sizeof(tmp_buf));
@@ -199,9 +199,9 @@ CF_Bool check_env(char* errmsg) {/*{{{*/
     free(pwd);
     free(cmd);
     return CF_True;
-}/*}}}*/
+}
 
-void load_window() {/*{{{*/
+void load_window() {
     
     win_cfft = CF_WINDOW_new(
             8,
@@ -259,9 +259,9 @@ void load_window() {/*{{{*/
 
     array->compare = str_compare;
     CF_ARRAY_sort(array);
-}/*}}}*/
+}
 
-void window_cfft(CF_Window* cfw) {/*{{{*/
+void window_cfft(CF_Window* cfw) {
     cfw->win = create_newwin(cfw);
     char msg[31];
 
@@ -280,9 +280,9 @@ void window_cfft(CF_Window* cfw) {/*{{{*/
     wattroff(cfw->win, COLOR_PAIR(COLOR_PAIR_INFO));
 
     wrefresh(cfw->win);
-}/*}}}*/
+}
 
-void window_list(CF_Window* cfw, CF_Array* array, int selected) {/*{{{*/
+void window_list(CF_Window* cfw, CF_Array* array, int selected) {
     cfw->win = create_newwin(cfw);
 
     char icon[5];
@@ -314,9 +314,9 @@ void window_list(CF_Window* cfw, CF_Array* array, int selected) {/*{{{*/
     }
 
     wrefresh(cfw->win);
-}/*}}}*/
+}
 
-void window_preview(CF_Window* cfw, CF_File* cff) {/*{{{*/
+void window_preview(CF_Window* cfw, CF_File* cff) {
     cfw->win = create_newwin(cfw);
 
     if (is_text_file(cff) == CF_True) {
@@ -354,18 +354,18 @@ void window_preview(CF_Window* cfw, CF_File* cff) {/*{{{*/
     }
 
     wrefresh(cfw->win);
-}/*}}}*/
+}
 
-void window_input(CF_Window* cfw, char* input_buffer, char* prompt) {/*{{{*/
+void window_input(CF_Window* cfw, char* input_buffer, char* prompt) {
     cfw->win = create_newwin(cfw);
     mvwprintw(cfw->win, 0, 2, "%s", prompt);
     wrefresh(cfw->win);
 
     mvwscanw(cfw->win, 1, 2, "%[^\n]", input_buffer);
     wrefresh(cfw->win);
-}/*}}}*/
+}
 
-void window_msg(CF_Window* cfw, const char* title, const char* msg, CF_Integer color_title, CF_Integer color_font) {/*{{{*/
+void window_msg(CF_Window* cfw, const char* title, const char* msg, CF_Integer color_title, CF_Integer color_font) {
     cfw->win = create_newwin(cfw);
 
     wattron(cfw->win, COLOR_PAIR(color_title));
@@ -377,4 +377,4 @@ void window_msg(CF_Window* cfw, const char* title, const char* msg, CF_Integer c
     wattroff(cfw->win, COLOR_PAIR(color_font));
 
     wrefresh(cfw->win);
-}/*}}}*/
+}
