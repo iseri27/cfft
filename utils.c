@@ -1,12 +1,17 @@
 #include "cf.h"
 #include "utils.h"
+#include "config.h"
 #include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ncurses.h>
 
 /**********************
 *      SOME UTILS     *
 **********************/
+
+char ubuf1[255], ubuf2[255];
 
 /**
  * Just wait an input, do nothing
@@ -123,12 +128,32 @@ void destroy_win(WINDOW *local_win) {
 }
 
 /**
+ * Chekc whether has character in a string
+ */
+CF_Bool has_char(char* str, char ch) {
+    int len = strlen(str);
+    for (int i = 0; i < len; i++) {
+        if (str[i] == ch) {
+            return CF_True;
+        }
+    }
+    return CF_False;
+}
+
+/**
  * Check file's name
  */
-CF_Bool check_file_name(char* basename) {
-    if (basename[0] == 'a') {
-        return CF_False;
+CF_Bool check_file_name(char* basename, char msg[]) {
+    int len1 = strlen(INVALID_CHARS);
+    
+    // Check if has invalid character
+    for (int i = 0; i < len1; i++) {
+        if (has_char(basename, INVALID_CHARS[i])) {
+            sprintf(msg, "Error %d: Invalid Character!", ERROR_INVALID_CHAR);
+            return CF_False;
+        }
     }
+
     return CF_True;
 }
 
@@ -191,9 +216,64 @@ void delete_tag(char* str) {
     }
 }
 
+
+/**
+ * Execute external command
+ */
+CF_Bool execute_cmd(const char* cmd, char* result, int max_result_len) {
+
+    FILE* fp = popen(cmd, "r");
+
+    if (fp == NULL) {
+         return CF_False;
+    }
+
+    fgets(result, max_result_len * sizeof(char), fp);
+
+    return CF_True;
+}
+
+/**
+ * Check substring
+ */
+CF_Bool has_substring(const char* str, const char* sub) {
+    const int len1 = strlen(str);
+    const int len2 = strlen(sub);
+
+    if (len2 > len1) {
+        return CF_False;
+    }
+
+    for (int i = 0; i < len1; i++) {
+        for (int j = 0; j < len2; j++) {
+            if (i + j >= len1 || tolower(str[i+j]) != tolower(sub[j])) {
+                break;
+            }
+
+            if (j == len2 - 1) {
+                return CF_True;
+            }
+        }
+    }
+
+    return CF_False;
+}
+
 /**
  * Judge if is a text file
  */
 CF_Bool is_text_file(CF_File* cff) {
-    return CF_True;
+
+    int max_result_len = 255;
+    char* resultbuf = (char*) calloc(max_result_len, sizeof(char));
+    char* cmd = (char*) calloc(255, sizeof(char));
+    sprintf(cmd, "file %s", cff->fullpath);
+    execute_cmd(cmd, resultbuf, max_result_len);
+
+    CF_Bool ok = has_substring(resultbuf, "text");
+
+    free(cmd);
+    free(resultbuf);
+
+    return ok;
 }

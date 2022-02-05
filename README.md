@@ -27,8 +27,10 @@ You cannot install it from AUR because I haven't upload it right now :)
 
 # To do #
 - [x] Chinese and Nerd Font Support
-- [ ] Strage color
-- [ ] Better reminder(Such as warning or success notification)
+- [x] Strage color
+- [x] Better reminder(Such as warning or success notification)
+- [ ] Responsive Window
+- [ ] File type judgement
 
 # Bug Report #
 If you don't want to use Github Issues,

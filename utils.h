@@ -43,9 +43,14 @@ WINDOW *create_newwin(CF_Window* cfw);
 void destroy_win(WINDOW *local_win);
 
 /**
+ * Chekc whether has character in a string
+ */
+CF_Bool has_char(char* str, char ch);
+
+/**
  * Check file's name
  */
-CF_Bool check_file_name(char* basename);
+CF_Bool check_file_name(char* basename, char msg[]);
 
 /**
  * Parse a string to Int
@@ -66,6 +71,16 @@ void get_icon(CF_File*, char icon[]);
  * Delete tags in string
  */
 void delete_tag(char* str);
+
+/**
+ * Execute external command
+ */
+CF_Bool execute_cmd(const char* cmd, char* result, int max_result_len);
+
+/**
+ * Check substring
+ */
+CF_Bool has_substring(const char* str, const char* sub);
 
 /**
  * Judge if is a text file

@@ -8,7 +8,7 @@
 #include <locale.h>
 #include <ncurses.h>
 
-char buf1[255], buf2[255], buf3[255];
+char buf1[255], buf2[255], buf3[255], errmsg[255];
 
 CF_Window* win_title   = NULL;
 CF_Window* win_list    = NULL;
@@ -69,13 +69,13 @@ int main(int argc, char *argv[]) {
                     delete_tag(buf2);
                 } else {
                     // Use usr-input name
-                    if (check_file_name(buf2) != CF_True) {
+                    if (check_file_name(buf2, errmsg) != CF_True) {
                         // User's input is not valid
                         ok = CF_False;
 
                         // Display warning
                         curs_set(0);
-                        window_msg(win_msg, "Error", "Invalid File Name!", COLOR_PAIR_ERROR, COLOR_PAIR_ERROR);
+                        window_msg(win_msg, "Error", errmsg, COLOR_PAIR_ERROR, COLOR_PAIR_ERROR);
 
                         // Hit any key to end warning wnidow
                         int c = getchar();
@@ -240,7 +240,7 @@ void window_list(CF_Window* cfw, CF_Array* array, int selected) {/*{{{*/
             memcpy(buf1, CF_ARRAY_get(array, i)->basename, (name_len + 1) * sizeof(char));
         }
 
-        mvwprintw(cfw->win, i+1, 6, "%-22s", buf1);
+        mvwprintw(cfw->win, i+1, 5, "%-22s", buf1);
 
         if (i == selected) {
             wattroff(cfw->win, A_REVERSE);
@@ -252,25 +252,40 @@ void window_list(CF_Window* cfw, CF_Array* array, int selected) {/*{{{*/
 
 void window_preview(CF_Window* cfw, CF_File* cff) {/*{{{*/
     cfw->win = create_newwin(cfw);
-    
-    FILE* fin = NULL;
-    fin = fopen(cff->fullpath, "r");
 
-    int row = 1;
-    while ((fgets(buf1, cfw->cols - 2, fin)) != NULL) {
-        int len = strlen(buf1);
-        if (buf1[len - 1] == '\n') {
-            buf1[len - 1] = '\0';
+    if (is_text_file(cff) == CF_True) {
+        FILE* fin = NULL;
+        fin = fopen(cff->fullpath, "r");
+
+        int row = 1;
+        while ((fgets(buf1, cfw->cols - 2, fin)) != NULL) {
+            int len = strlen(buf1);
+            if (buf1[len - 1] == '\n') {
+                buf1[len - 1] = '\0';
+            }
+
+            mvwprintw(cfw->win, row++, 2, "%s", buf1);
+
+            if (row >= cfw->rows - 2) {
+                break;
+            }
         }
 
-        mvwprintw(cfw->win, row++, 1, "%s", buf1);
+        fclose(fin);
+    } else {
+        char* preview  = (char*) calloc(255, sizeof(char));
+        char* cmd = (char*) calloc(255, sizeof(char));
+        
+        sprintf(cmd, "file %s", cff->fullpath);
+        execute_cmd(cmd, preview, 255);
 
-        if (row >= cfw->rows - 2) {
-            break;
-        }
+        wattron(cfw->win, COLOR_PAIR(COLOR_PAIR_INFO));
+        mvwprintw(cfw->win, 1, 2, "%s", preview);
+        wattroff(cfw->win, COLOR_PAIR(COLOR_PAIR_INFO));
+
+        free(cmd);
+        free(preview);
     }
-
-    fclose(fin);
 
     wrefresh(cfw->win);
 }/*}}}*/
@@ -280,7 +295,7 @@ void window_input(CF_Window* cfw, char* input_buffer, char* prompt) {/*{{{*/
     mvwprintw(cfw->win, 0, 2, "%s", prompt);
     wrefresh(cfw->win);
 
-    mvwscanw(cfw->win, 1, 2, "%s", input_buffer);
+    mvwscanw(cfw->win, 1, 2, "%[^\n]", input_buffer);
     wrefresh(cfw->win);
 }/*}}}*/
 
