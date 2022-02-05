@@ -40,10 +40,11 @@ static CF_Integer MARGIN_INTERVAL = 1;
  * Color Config
  */
 static CF_Integer COLOR_BACKGROUND   = COLOR_BLACK;
-static CF_Integer COLOR_PAIR_SUCCESS = 1;
-static CF_Integer COLOR_PAIR_ERROR   = 2;
-static CF_Integer COLOR_PAIR_INFO    = 3;
-static CF_Integer COLOR_PAIR_WARNING = 4;
+static CF_Integer COLOR_PAIR_DEFAULT = 1;
+static CF_Integer COLOR_PAIR_SUCCESS = 2;
+static CF_Integer COLOR_PAIR_ERROR   = 3;
+static CF_Integer COLOR_PAIR_INFO    = 4;
+static CF_Integer COLOR_PAIR_WARNING = 5;
 
 /**
  * Error Code

@@ -11,13 +11,17 @@
 /**
  * Create a window struct
  */
-CF_Window* CF_WINDOW_new(CF_Integer rows, CF_Integer cols, CF_Integer start_row, CF_Integer start_col, int border_color, int font_color, const char* title) {
+CF_Window* CF_WINDOW_new(CF_Integer rows, CF_Integer cols, CF_Integer start_row, CF_Integer start_col, CF_Integer color_border, CF_Integer color_content, CF_Integer color_title, const char* title) {
     CF_Window* cfw = (CF_Window*) calloc(1, sizeof(CF_Window));
 
     cfw->cols = cols;
     cfw->rows = rows;
     cfw->start_col = start_col;
     cfw->start_row = start_row;
+    cfw->color_border = color_border;
+    cfw->color_content = color_content;
+    cfw->color_title = color_title;
+
     cfw->win = NULL;
     
     if (title == NULL) {

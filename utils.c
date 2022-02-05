@@ -108,7 +108,10 @@ WINDOW *create_newwin(CF_Window* cfw) {
     WINDOW* local_win;
     local_win = newwin(cfw->rows, cfw->cols, cfw->start_row, cfw->start_col);
     wrefresh(local_win);
+
+    wattron(local_win, COLOR_PAIR(cfw->color_border));
     box(local_win, 0, 0);
+    wattroff(local_win, COLOR_PAIR(cfw->color_border));
     wrefresh(local_win);
 
     if (cfw->title != NULL) {
@@ -135,9 +138,6 @@ WINDOW* create_empty_win(CF_Window* cfw) {
 void destroy_win(WINDOW *local_win) {
     wborder(local_win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
     wclear(local_win);
-    // for (int row = 0; row < local; inc-expression) {
-    // statements
-    // }
     wrefresh(local_win);
     delwin(local_win);
 }

@@ -10,7 +10,7 @@
 
 char buf1[255], buf2[255], buf3[255], errmsg[255];
 
-CF_Window* win_cfft   = NULL;
+CF_Window* win_cfft    = NULL;
 CF_Window* win_list    = NULL;
 CF_Window* win_preview = NULL;
 CF_Window* win_msg     = NULL;
@@ -38,8 +38,9 @@ int main(int argc, char *argv[]) {
                 COLS - PADDING_LEFT - PADDING_RIGHT - 5 * MARGIN_INTERVAL, 
                 (LINES - 3) / 3,
                 PADDING_LEFT + 5 * MARGIN_INTERVAL, 
-                COLOR_WHITE,
-                COLOR_WHITE,
+                COLOR_PAIR_WARNING,
+                COLOR_PAIR_WARNING,
+                COLOR_PAIR_WARNING,
                 NULL
             );
 
@@ -154,6 +155,7 @@ void init(int argc, char* argv[]) {
     // init_color(COLOR_YELLOW, 255, 214,  102); // rgb(250, 144,  22)
 
     // format: init_pair(index, fg, bg)
+    init_pair(COLOR_PAIR_DEFAULT, COLOR_WHITE , COLOR_BACKGROUND);
     init_pair(COLOR_PAIR_SUCCESS, COLOR_GREEN , COLOR_BACKGROUND);
     init_pair(COLOR_PAIR_ERROR  , COLOR_RED   , COLOR_BACKGROUND);
     init_pair(COLOR_PAIR_INFO   , COLOR_CYAN  , COLOR_BACKGROUND);
@@ -169,13 +171,12 @@ CF_Bool check_env(char* errmsg) {
     execute_cmd(cmd, pwd, 255);
     path_join(HOME_DIR, TEMPLATES_DIR, tmp_buf);
 
+    CF_Bool okay = CF_True;
+
     if (strcmp(pwd, tmp_buf) == 0) {
         curs_set(0);
         sprintf(errmsg, "Error %d: CFFT Cannot Run Under TEMPLATE DIR. Please Press ESC to Exit.", ERROR_INVALID_CWD);
-        free(tmp_buf);
-        free(pwd);
-        free(cmd);
-        return CF_False;
+        okay = CF_False;
     }
 
     // int row, col;
@@ -200,7 +201,7 @@ CF_Bool check_env(char* errmsg) {
     free(tmp_buf);
     free(pwd);
     free(cmd);
-    return CF_True;
+    return okay;
 }
 
 void load_window() {
@@ -210,8 +211,9 @@ void load_window() {
             30,
             PADDING_TOP,
             PADDING_LEFT,
-            COLOR_WHITE,
-            COLOR_WHITE,
+            COLOR_PAIR_INFO,
+            COLOR_PAIR_INFO,
+            COLOR_PAIR_INFO,
             NULL
         );
 
@@ -220,8 +222,9 @@ void load_window() {
             win_cfft->cols, 
             PADDING_TOP + win_cfft->rows + MARGIN_INTERVAL,
             PADDING_LEFT, 
-            COLOR_WHITE,
-            COLOR_WHITE,
+            COLOR_PAIR_SUCCESS,
+            COLOR_PAIR_INFO,
+            COLOR_PAIR_INFO,
             "List" 
         );
 
@@ -230,8 +233,9 @@ void load_window() {
             COLS - PADDING_LEFT - win_cfft->cols - PADDING_RIGHT,
             PADDING_TOP,
             PADDING_LEFT + win_cfft->cols + MARGIN_INTERVAL,
-            COLOR_WHITE,
-            COLOR_WHITE,
+            COLOR_PAIR_WARNING,
+            COLOR_PAIR_INFO,
+            COLOR_PAIR_INFO,
             "Preview"
         );
 
@@ -240,8 +244,9 @@ void load_window() {
             COLS - PADDING_LEFT - PADDING_RIGHT - 5 * MARGIN_INTERVAL, 
             (LINES - 3) / 3,
             PADDING_LEFT + 5 * MARGIN_INTERVAL, 
-            COLOR_WHITE,
-            COLOR_WHITE,
+            COLOR_PAIR_INFO,
+            COLOR_PAIR_INFO,
+            COLOR_PAIR_INFO,
             NULL
         );
 
@@ -250,8 +255,9 @@ void load_window() {
             win_input->cols, 
             win_input->start_row,
             win_input->start_col, 
-            COLOR_WHITE,
-            COLOR_WHITE,
+            COLOR_PAIR_INFO,
+            COLOR_PAIR_INFO,
+            COLOR_PAIR_INFO,
             NULL
         );
 

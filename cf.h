@@ -31,8 +31,9 @@ typedef struct CF_Array {
 } CF_Array;
 
 typedef struct CF_Window {
-    CF_Integer  cols, rows;
-    CF_Integer  start_col, start_row;
+    CF_Integer cols, rows;
+    CF_Integer start_col, start_row;
+    CF_Integer color_border, color_content, color_title;
     WINDOW* win;
     char* title;
 } CF_Window;
@@ -48,8 +49,9 @@ CF_Window* CF_WINDOW_new(
         CF_Integer cols,
         CF_Integer start_row,
         CF_Integer start_col,
-        int border_color,
-        int font_color,
+        CF_Integer color_border,
+        CF_Integer color_content,
+        CF_Integer color_title,
         const char* title
     );
 
