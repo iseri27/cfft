@@ -33,7 +33,6 @@ typedef struct CF_Array {
 typedef struct CF_Window {
     CF_Integer  cols, rows;
     CF_Integer  start_col, start_row;
-    int border_color, font_color;
     WINDOW* win;
     char* title;
 } CF_Window;

@@ -18,8 +18,6 @@ CF_Window* CF_WINDOW_new(CF_Integer rows, CF_Integer cols, CF_Integer start_row,
     cfw->rows = rows;
     cfw->start_col = start_col;
     cfw->start_row = start_row;
-    cfw->border_color = border_color;
-    cfw->font_color = font_color;
     cfw->win = NULL;
     
     if (title == NULL) {

@@ -10,12 +10,6 @@
 
 char buf1[255], buf2[255], buf3[255];
 
-CF_Integer PADDING_TOP;
-CF_Integer PADDING_BOTTOM;
-CF_Integer PADDING_LEFT;
-CF_Integer PADDING_RIGHT;
-CF_Integer MARGIN_INTERVAL;
-
 CF_Window* win_title   = NULL;
 CF_Window* win_list    = NULL;
 CF_Window* win_preview = NULL;
@@ -31,7 +25,7 @@ void window_cfft(CF_Window* cfw);
 void window_list(CF_Window* cfw, CF_Array* array, int selected);
 void window_preview(CF_Window* cfw, CF_File* cff);
 void window_input(CF_Window* cfw, char* input_buffer, char* prompt);
-void window_msg(CF_Window* cfw, const char* title, const char* msg);
+void window_msg(CF_Window* cfw, const char* title, const char* msg, CF_Integer color_title, CF_Integer color_font);
 
 int main(int argc, char *argv[]) {
     setlocale(LC_ALL, "");
@@ -65,15 +59,6 @@ int main(int argc, char *argv[]) {
         } else if (ch == (int)'k' || ch == (int)'K') {
             selected = (selected - 1) % array->size;
         } else if (ch == (int)'\n' || ch == (int)'\r') {
-            // 复制文件:
-            //  - 确定被选中的文件 (selected)
-            //  - 弹出对话框, 确定拷贝后的文件名称
-            //    - 新指定名称 -> 使用新指定的名称
-            //    - 空 -> 使用默认名称 -> 去除默认名称中的Tag
-            //  - 判断要复制的文件是否已经在当前工作目录下存在
-            //    - 已存在 -> 提示改名
-            //    - 未存在 -> 可以复制文件
-            //  - 结束程序
             curs_set(1);
             do {
                 memset(buf2, 0, sizeof(buf2));
@@ -94,8 +79,7 @@ int main(int argc, char *argv[]) {
 
                         // Display warning
                         curs_set(0);
-                        win_msg->font_color = COLOR_RED;
-                        window_msg(win_msg, "Error", "Invalid File Name!");
+                        window_msg(win_msg, "Error", "Invalid File Name!", COLOR_PAIR_ERROR, COLOR_PAIR_ERROR);
 
                         // Hit any key to end warning wnidow
                         int c = getchar();
@@ -111,7 +95,7 @@ int main(int argc, char *argv[]) {
 
             CF_FILE_copy(CF_ARRAY_get(array, selected), buf2, CF_True);
 
-            window_msg(win_msg, "Success", "Successfully to Create File!");
+            window_msg(win_msg, "Success", "Successfully to Create File!", COLOR_PAIR_SUCCESS, COLOR_PAIR_INFO);
             int c = getchar();
             destroy_win(win_msg->win);
 
@@ -143,7 +127,11 @@ void init() {/*{{{*/
     PADDING_BOTTOM = 5;
     MARGIN_INTERVAL = 1;
 
-    init_pair(1, COLOR_BLACK, COLOR_GREEN);
+    // format: init_pair(index, fg, bg)
+    init_pair(COLOR_PAIR_SUCCESS, COLOR_GREEN, COLOR_BG);
+    init_pair(COLOR_PAIR_ERROR, COLOR_RED, COLOR_BG);
+    init_pair(COLOR_PAIR_INFO, COLOR_CYAN, COLOR_BG);
+    init_pair(COLOR_PAIR_WARNING, COLOR_YELLOW, COLOR_BG);
     
     win_title = CF_WINDOW_new(
             5,
@@ -204,9 +192,15 @@ void init() {/*{{{*/
 void window_cfft(CF_Window* cfw) {/*{{{*/
     cfw->win = create_newwin(cfw);
     char msg[31];
+
+    wattron(cfw->win, COLOR_PAIR(COLOR_PAIR_SUCCESS));
+
     sprintf(msg, "CFFT version %s", VERSION);
     int len = strlen(msg);
     mvwprintw(cfw->win, 0, 2, "%s", msg);
+
+    wattroff(cfw->win, COLOR_PAIR(COLOR_PAIR_SUCCESS));
+
     wrefresh(cfw->win);
 }/*}}}*/
 
@@ -274,17 +268,20 @@ void window_input(CF_Window* cfw, char* input_buffer, char* prompt) {/*{{{*/
     mvwprintw(cfw->win, 0, 2, "%s", prompt);
     wrefresh(cfw->win);
 
-    mvwscanw(cfw->win, 1, 1, "%s", input_buffer);
+    mvwscanw(cfw->win, 1, 2, "%s", input_buffer);
     wrefresh(cfw->win);
 }/*}}}*/
 
-void window_msg(CF_Window* cfw, const char* title, const char* msg) {/*{{{*/
+void window_msg(CF_Window* cfw, const char* title, const char* msg, CF_Integer color_title, CF_Integer color_font) {/*{{{*/
     cfw->win = create_newwin(cfw);
 
-    wattron(cfw->win, COLOR_PAIR(1));
+    wattron(cfw->win, COLOR_PAIR(color_title));
     mvwprintw(cfw->win, 0, 2, "%s", title);
-    mvwprintw(cfw->win, 1, 1, "%s", msg);
-    wattroff(cfw->win, COLOR_PAIR(1));
+    wattroff(cfw->win, COLOR_PAIR(color_title));
+
+    wattron(cfw->win, COLOR_PAIR(color_font));
+    mvwprintw(cfw->win, 1, 2, "%s", msg);
+    wattroff(cfw->win, COLOR_PAIR(color_font));
 
     wrefresh(cfw->win);
 }/*}}}*/
