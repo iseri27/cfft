@@ -177,24 +177,24 @@ CF_Bool check_env(char* errmsg) {/*{{{*/
         return CF_False;
     }
 
-    int row, col;
-    getmaxyx(stdscr, row, col);
-
-    if (row < MIN_WINDOW_ROW) {
-        sprintf(errmsg, "Error %d: Window height is too small!", ERROR_INVALID_HEIGHT);
-        free(tmp_buf);
-        free(pwd);
-        free(cmd);
-        return CF_False;
-    }
-
-    if (col < MIN_WINDOW_COL) {
-        sprintf(errmsg, "Error %d: Window width is too small!", ERROR_INVALID_WIDTH);
-        free(tmp_buf);
-        free(pwd);
-        free(cmd);
-        return CF_False;
-    }
+    // int row, col;
+    // getmaxyx(stdscr, row, col);
+    //
+    // if (row < MIN_WINDOW_ROW) {
+    //     sprintf(errmsg, "Error %d: Window height is too small!", ERROR_INVALID_HEIGHT);
+    //     free(tmp_buf);
+    //     free(pwd);
+    //     free(cmd);
+    //     return CF_False;
+    // }
+    //
+    // if (col < MIN_WINDOW_COL) {
+    //     sprintf(errmsg, "Error %d: Window width is too small!", ERROR_INVALID_WIDTH);
+    //     free(tmp_buf);
+    //     free(pwd);
+    //     free(cmd);
+    //     return CF_False;
+    // }
 
     free(tmp_buf);
     free(pwd);

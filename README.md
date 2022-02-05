@@ -29,10 +29,11 @@ You cannot install it from AUR because I haven't upload it right now :)
 - [x] Chinese and Nerd Font Support
 - [x] Strage color
 - [x] Better reminder(Such as warning or success notification)
-- [ ] Responsive Window
 - [x] File type judgement
 - [x] Forbidden cfft run in templates dir
 - [ ] configuration from file
+- [ ] Responsive Window
+- [ ] Window size check
 
 # Bug Report #
 If you don't want to use Github Issues,
