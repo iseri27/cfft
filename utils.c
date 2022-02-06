@@ -341,7 +341,7 @@ void str_cut(char* dest, const char* src, const int cut_len) {
     }
 
     if (dest[cut_len - 1] >= 0) {
-        for (int i = cut_len - 1; i < slen; i++) {
+        for (int i = cut_len; i < slen; i++) {
             dest[i] = '\0';
         }
         return;
@@ -374,6 +374,7 @@ void safe_wprint(CF_Window* cfw, int row, int col, const char* str) {
     str_cut(tmp, str, cfw->cols - delta_len - col);
 
     mvwprintw(cfw->win, row, col, "%s", tmp);
+
     free(tmp);
 }
 

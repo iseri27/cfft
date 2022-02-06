@@ -12,6 +12,9 @@ TARGET = cfft
 $(TARGET): $(OBJECTS) $(HEADERS)
 	$(CC) $(OBJECTS) $(CFLAGS) -o $@ $(NCURSES_LIBS)
 
+test: test.o utils.o cf.o
+	$(CC) $^ $(CFLAGS) -o $@ $(NCURSES_LIBS)
+
 %.o: %.c
 	$(CC) -c $^ $(CFLAGS) -o $@ $(NCURSES_LIBS)
 
