@@ -52,6 +52,7 @@ int main(int argc, char *argv[]) {
         // When press ESC, exit the program
         if (ch == 27) {
             curs_set(1);
+            endwin();
             exit(0);
         }
     }
