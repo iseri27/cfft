@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
         } else if (ch == (int)'j' || ch == (int)'J') {
             selected = (selected + 1) % array->size;
         } else if (ch == (int)'k' || ch == (int)'K') {
-            selected = (selected - 1) % array->size;
+            selected = (selected - 1 + array->size) % array->size;
         } else if (ch == (int)'\n' || ch == (int)'\r') {
             curs_set(1);
             do {
