@@ -151,7 +151,7 @@ void CF_ARRAY_sort(CF_Array* arr) {
 
     for (int i = 0; i < arr->size; i++) {
         for (int j = 0; j < arr->size; j++) {
-            if (compare(arr->lt[i], arr->lt[j]) > 0) {
+            if (compare(arr->lt[i], arr->lt[j]) < 0) {
                 CF_File* tmp = arr->lt[i];
                 arr->lt[i] = arr->lt[j];
                 arr->lt[j] = tmp;
