@@ -8,6 +8,11 @@ CFFT works in terminal. It has a curses UI.
 
 ## Installation ##
 
+### For Windows
+I do not have machine in windows, so I don't know whether cfft can run in windows.
+
+Maybe you can build it from source after modifing the source and installing the dependencies.
+
 ### From Source Code ###
 1. Download this repo at your wanted path
   ```
