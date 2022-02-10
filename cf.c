@@ -103,14 +103,13 @@ CF_Array* CF_ARRAY_new(CF_Size size) {
  */
 CF_Bool CF_ARRAY_add(CF_Array* arr, CF_File* cff) {
     if (arr->size == arr->capacity) {
-        const int newlen = (int)(1.5 * arr->capacity);
-        CF_File** lt = realloc(arr->lt, newlen);
-        if (lt == NULL) {
+        const int newlen = (int)(ARRAY_GROW_RATIO * arr->capacity);
+        arr->lt = realloc(arr->lt, newlen);
+        if (arr->lt == NULL) {
             return CF_False;
         } else {
             arr->capacity = newlen;
         }
-
     }
 
     arr->lt[arr->size++] = cff;

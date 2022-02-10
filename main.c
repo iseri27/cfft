@@ -2,6 +2,7 @@
 #include "utils.h"
 #include "config.h"
 #include <stdio.h>
+#include <ctype.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -81,6 +82,12 @@ int main(int argc, char *argv[]) {
             selected = (selected + 1) % array->size;
         } else if (ch == (int)'k' || ch == (int)'K') {
             selected = (selected - 1 + array->size) % array->size;
+        } else if (isdigit(ch)) {
+            int number = (int)(ch - '0');
+            if (number == 0) {
+                number = 10;
+            }
+            selected = (number - 1 + array->size) % array->size;
         } else if (ch == (int)'\n' || ch == (int)'\r') {
             curs_set(1);
             do {
@@ -294,12 +301,12 @@ void window_cfft(CF_Window* cfw) {
 void window_list(CF_Window* cfw, CF_Array* array, int selected) {
     cfw->win = create_newwin(cfw);
 
-    char icon[5];
+    char index[4];
     
     for (int i = 0; i < array->size; i++) {
-        get_icon(CF_ARRAY_get(array, i), icon);
+        get_number(i+1, array->size, index);
 
-        mvwprintw(cfw->win, i+1, 2, "%s", icon);
+        mvwprintw(cfw->win, i+1, 2, "%s", index);
         
         if (i == selected) {
             wattron(cfw->win, A_REVERSE);

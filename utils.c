@@ -223,10 +223,16 @@ void trim(char str[]) {
 }
 
 /**
- * Get icon of file
+ * Get number of file
  */
-void get_icon(CF_File* cfw, char icon[]) {
-    strcpy(icon, "");
+void get_number(int index, int max, char result[]) {
+    if (max < 10) {
+        sprintf(result, "%d", index);
+    } else if (max >= 10 && max < 100) {
+        sprintf(result, "%2d", index);
+    } else {
+        sprintf(result, "%d", index);
+    }
 }
 
 /**

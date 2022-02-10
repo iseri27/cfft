@@ -5,7 +5,7 @@
 #define CFFT_H
 
 #define BUFFER_SIZE 31
-#define DEFAULT_ARRAY_LENGTH 10
+#define DEFAULT_ARRAY_LENGTH 20
 
 typedef unsigned int CF_Size;
 typedef int CF_Bool;
@@ -14,6 +14,10 @@ typedef int CF_Error;
 
 static const CF_Bool CF_True = 1;
 static const CF_Bool CF_False = 0;
+
+// Grow ratio every time array's capacity
+// is not enough
+static const double ARRAY_GROW_RATIO = 1.5;
 
 typedef struct CF_File {
     char* path;

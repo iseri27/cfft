@@ -76,7 +76,7 @@ void trim(char str[]);
 /**
  * Get icon of file
  */
-void get_icon(CF_File*, char icon[]);
+void get_number(int index, int max, char result[]);
 
 /**
  * Delete tags in string
