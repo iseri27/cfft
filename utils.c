@@ -332,6 +332,26 @@ CF_Bool is_text_file(CF_File* cff) {
 }
 
 /**
+ * Judge if is a directory
+ */
+CF_Bool is_directory(CF_File* cff) {
+    
+    int max_result_len = 255;
+    char* resultbuf = (char*) calloc(max_result_len, sizeof(char));
+    char* cmd = (char*) calloc(255, sizeof(char));
+    sprintf(cmd, "file \"%s\"", cff->fullpath);
+
+    execute_cmd(cmd, resultbuf, max_result_len);
+
+    CF_Bool ok = has_substring(resultbuf, "directory");
+
+    free(cmd);
+    free(resultbuf);
+
+    return ok;
+}
+
+/**
  * Cut string
  * Characters will be cut until its length 
  * will be less than **cut_len**

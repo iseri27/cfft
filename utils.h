@@ -99,6 +99,11 @@ CF_Bool has_substring(const char* str, const char* sub);
 CF_Bool is_text_file(CF_File* cff);
 
 /**
+ * Judge if is a directory
+ */
+CF_Bool is_directory(CF_File* cff);
+
+/**
  * Cut string
  * Characters will be cut until its length 
  * will be less than **cut_len**

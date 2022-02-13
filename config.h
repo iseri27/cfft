@@ -11,7 +11,7 @@ static const char* VERSION = "0.0.2";
  * Template file directory
  */
 static const char* HOME_DIR = "/home/corona";
-static const char* TEMPLATES_DIR = "Templates";
+static const char* TEMPLATES_DIR = "Templates/files";
 
 /**
  * Chinese character length

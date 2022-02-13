@@ -248,7 +248,9 @@ CF_Bool CF_FILE_list_directory(CF_File* cffp, CF_Bool show_hidden, CF_Array* arr
             }
 
             CF_File *fp = CF_FILE_new(cffp->fullpath, dir->d_name);
-            CF_ARRAY_add(arr, fp);
+            // if (is_directory(fp) != CF_True) {
+                CF_ARRAY_add(arr, fp);
+            // }
 
         }
         closedir(directory);
