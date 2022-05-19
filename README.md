@@ -31,6 +31,8 @@ in current working directory now.
 5. CFFT has **vim-like** key bindings, you can use **h/j/k/l** 
 to control cursor move and choose which template you want to use.
 
+<b>On openSUSE, package <u>ncurses-devel</u> is needed</b>.
+
 ### From AUR ###
 You cannot install it from AUR because I haven't upload it right now :)
 
