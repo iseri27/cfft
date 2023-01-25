@@ -6,8 +6,3 @@ test.*
 cfft
 cf
 test
-
-*.sh
-*.tex
-*.docx
-*\[\[*\]\]

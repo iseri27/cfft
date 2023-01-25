@@ -1,28 +1,13 @@
-SOURCES := $(wildcard ./*.c)
-HEADERS := $(wildcard ./*.h)
-OBJECTS := $(patsubst ./%.c, %.o, $(SOURCES))
+src := cfft.sh
 
-CC = gcc
+PREFIX=$$HOME/.local
 
-NCURSES_CFLAGS = `pkg-config --cflags ncursesw`
-NCURSES_LIBS =  `pkg-config --libs ncursesw`
-CFLAGS += -std=c11 -g -DDEBUG $(NCURSES_CFLAGS)
-TARGET = cfft
+all: ${src}
+	mkdir -p ${PREFIX}/bin
+	cp -f cfft.sh ${PREFIX}/bin/cfft
+	chmod +x ${PREFIX}/bin/cfft
 
-$(TARGET): $(OBJECTS) $(HEADERS)
-	$(CC) $(OBJECTS) $(CFLAGS) -o $@ $(NCURSES_LIBS)
+install: all
 
-test: test.o utils.o cf.o
-	$(CC) $^ $(CFLAGS) -o $@ $(NCURSES_LIBS)
-
-%.o: %.c
-	$(CC) -c $^ $(CFLAGS) -o $@ $(NCURSES_LIBS)
-
-install: $(TARGET)
-	cp -f cfft /usr/local/bin/cfft
-
-clean:
-	$(RM) *.o *.exe $(TARGET) cfft test
-
-uninstall: clean
-	$(RM) /usr/local/bin/cfft
+uninstall:
+	rm -f ${PREFIX}/bin/cfft
