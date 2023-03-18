@@ -27,8 +27,12 @@ for((i=0; i < $file_num; i++)); do
 	echo "$idx. ${file_list[$i]} "
 done
 
-echo -e "选择要创建的模板:"
+echo -e "选择要创建的模板 (输入 0 以退出程序):"
 read chosen
+
+if [[ "$chosen" = "0" ]]; then
+	exit 0
+fi
 
 if ! [[ "$chosen" =~ ^[0-9]+$ ]] || ! [ "$chosen" -ge 1 ] || ! [ "$chosen" -le $file_num ]; then
 	echo "无效选择: \"$chosen\" !"
