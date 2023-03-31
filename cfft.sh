@@ -44,4 +44,4 @@ if [[ -f "./${file_list[$chosen]}" ]]; then
 	exit 1
 fi
 
-cp "$template_dir/${file_list[$chosen]}" ./${file_list[$chosen]}
+cp -r "$template_dir/${file_list[$chosen]}" ./${file_list[$chosen]}
