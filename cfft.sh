@@ -39,6 +39,8 @@ if ! [[ "$chosen" =~ ^[0-9]+$ ]] || ! [ "$chosen" -ge 1 ] || ! [ "$chosen" -le $
 	exit 1
 fi
 
+chosen=$((chosen-1))
+
 if [[ -f "./${file_list[$chosen]}" ]]; then
 	echo "当前目录已有同名文件!"
 	exit 1
