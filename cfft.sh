@@ -3,9 +3,12 @@
 template_dir=$HOME/Templates
 
 if ! [[ -d $template_dir ]]; then
-	echo "没有模板文件夹!"
-	notify-send -t 1500 "❌没有模板文件夹"
-	exit 1
+	template_dir=$HOME/templates
+	if ! [[ -d $template_dir ]]; then
+		echo "没有模板文件夹!"
+		notify-send -t 1500 "❌没有模板文件夹"
+		exit 1
+	fi
 fi
 
 file_list=`ls $template_dir`
